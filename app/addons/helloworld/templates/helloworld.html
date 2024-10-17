@@ -1,4 +1,7 @@
 {% extends "base_template/base_merge_template_v3/base.html" %}
+{% block jstop %}
+<!-- js top here -->
+{% endblock jstop %}
 {% block custom_style %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.css">
 <style>
@@ -216,3 +219,6 @@
     </div>
 </div>
 {% endblock content %}
+{% block jsbottom %}
+<!-- js bottom here -->
+{% endblock jsbottom %}
