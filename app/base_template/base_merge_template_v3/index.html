@@ -31,11 +31,15 @@
 
   <!-- Scripts -->
   <script defer src="{{ url_for('static', filename='static/static_template_v3/js/app.js') }}"></script>
-
+  {% block jstop %}
+  {% endblock jstop %}
   <title>Simplicity | {{name}}</title>
 </head>
 {% block body %}
 {% endblock body %}
+
+{% block jsbottom %}
+{% endblock jsbottom %}
 
 <script>
   /* If browser back button was used, flush cache */
