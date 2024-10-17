@@ -1,0 +1,63 @@
+{% extends "base_template/v2/baseV2.html" %}
+{% block title %}Export User from AD{% endblock title %}
+{% block containerfluid %}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Export and Change permission user</h3>
+            </div>
+            <form role="form" action="{{ url_for('powerad.export_user_add') }}" method="post">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" name="name" id="name" value="{{ ad_user[0].lastname }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" name="username" id="username" value="{{ ad_user[0].username }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="department">Department</label>
+                        <input type="text" class="form-control" name="department" id="department" value="{{ ad_user[0].department }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="position">Position</label>
+                        <input type="text" class="form-control" name="position" id="position" value="{{ ad_user[0].position }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" name="email" id="email"
+                            value="{{ ad_user[0].email_domain }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="appsid">Apps ID</label>
+                        <input type="text" class="form-control" name="appsid" id="appsid" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="level">Level</label>
+                        <!-- <input type="text" class="form-control" id="level" name="level"> -->
+                        <select class="form-control" name="level" id="level">
+                            <option value="administrator">Administrator</option>
+                            <option value="user">User</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="addonlevel">Leveling Addon</label>
+                        <!-- <input type="text" class="form-control" id="level" name="level"> -->
+                        <select class="form-control" name="addonlevel" id="addonlevel">
+                            <option value="parent">Parent</option>
+                            <option value="member">Member</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock containerfluid %}

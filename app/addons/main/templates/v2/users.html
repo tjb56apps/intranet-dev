@@ -1,0 +1,72 @@
+{% extends "base_template/v2/baseV2.html" %}
+{% block title %}Users{% endblock title %}
+{% block customcss %}
+<!-- DataTables -->
+<link rel="stylesheet" href="{{ url_for('static', filename='static/v2/plugins/datatables/dataTables.bootstrap.css') }}">
+{% endblock customcss %}
+{% block containerfluid %}
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title">List of all registered employees</h3>
+      </div>
+      <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Domain</th>
+              <th>Department</th>
+              <th>Position</th>
+              <th>Username</th>
+              <th>AppsID</th>
+              <th>Level</th>
+              <th>Leveling</th>
+              <!-- <th>Type</th> -->
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in all_users %}
+            <tr>
+              <td>{{ user.name.split('-')[0].strip() }}</td>
+              <td>{{ user.domain }}</td>
+              <td>{{ user.department }}</td>
+              <td>{{ user.position }}</td>
+              <td>{{ user.username }}</td>
+              <td>{{ user.apps_id }}</td>
+              <td>{{ user.level }}</td>
+              <td>{{ user.leveling }}</td>
+              <!-- <td>{{ user.type }}</td> -->
+              <td><a href="{{ url_for('main.user_edit', id=user.id) }}">Edit</a> / <a
+                  href="{{ url_for('main.user_delete', id=user.id) }}">Delete</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock containerfluid %}
+{% block customjs %}
+<!-- DataTables -->
+<script src="{{ url_for('static', filename='static/v2/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='static/v2/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+{% endblock customjs %}
+{% block customotherjs %}
+<script>
+  $(function () {
+    $("#example1").DataTable();
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false
+    });
+  });
+</script>
+{% endblock customotherjs %}

@@ -1,0 +1,132 @@
+{% extends "base_template/base_merge_template_v3/index.html" %}
+{% block body %}
+
+<body class="font-poppins">
+  <div class="min-h-screen bg-cover bg-no-repeat" style="
+          background-image: linear-gradient(
+              90.16deg,
+              rgba(31, 41, 55, 0.6) 31.44%,
+              rgba(31, 41, 55, 0.55) 48.37%,
+              rgba(31, 41, 55, 0.4) 69.38%,
+              rgba(31, 41, 55, 0.2) 78.49%,
+              rgba(31, 41, 55, 0) 99.87%
+            ),
+            url(&quot;/app/static/static_template_v3/img/simplicity-bg-login.jpg&quot;);
+        ">
+    <div class="relative mx-auto max-w-[1440px] px-[12px] md:px-[0px]">
+      <!-- [Desktop] Theme Switcher -->
+      <div class="right-0 py-[28px] pr-[28px] md:absolute xl:pr-0">
+        <button @click="$store.preference.theme.toggle()">
+          <template x-if="$store.preference.theme.isLight">
+            <img width="40" height="40"
+              src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-sun.png') }}"
+              alt="Theme switcher" />
+          </template>
+          <template x-if="$store.preference.theme.isDark">
+            <img width="40" height="40"
+              src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-moon.png') }}"
+              alt="Theme switcher" />
+          </template>
+        </button>
+      </div>
+      <!-- End of [Desktop] Theme Switcher-->
+
+      <div class="grid grid-cols-1 content-center md:min-h-screen md:justify-items-center">
+        <div class="flex max-w-[586px] flex-col">
+          <form method="post"
+            class="rounded-[20px] border border-white/[.4] bg-white/[.4] px-[40px] py-[90px] backdrop-blur-md dark:border-neutral-800/[.4] dark:bg-neutral-800/[.4]"
+            action="{{ url_for('main.auth') }}">
+            <div class="mb-[40px]">
+              <img class="mx-auto max-h-[60px] w-auto" height="60" width="auto"
+                src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-full.svg') }}"
+                :src="$store.preference.theme.isDark ? '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-full-dark.svg') }}' : '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-full.svg') }}'"
+                alt="Simplicity logo" />
+            </div>
+
+            <div class="mb-[32px] flex flex-col gap-[12px]">
+              <h1 class="text-center text-[30px] font-semibold leading-[38px] text-primary-600 dark:text-secondary-600">
+                Sign In
+              </h1>
+            </div>
+
+            <div class="mb-[40px] flex flex-col gap-[20px]">
+              <div>
+                <label class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white" for="username">
+                  Username
+                </label>
+
+                <div
+                  class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-white px-[14px] py-[8px] dark:border-neutral-700 dark:bg-neutral-900">
+                  <div>
+                    <img width="20" height="20"
+                      src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-user-neutral.png') }}"
+                      alt="" />
+                  </div>
+                  <input
+                    class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] dark:text-white"
+                    id="username" name="username" type="text" placeholder="Username" value="" />
+                </div>
+              </div>
+
+              <div>
+                <label class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white" for="password">
+                  Password
+                </label>
+
+                <div
+                  class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-white px-[14px] py-[8px] dark:border-neutral-700 dark:bg-neutral-900">
+                  <div>
+                    <img width="20" height="20"
+                      src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-unlock.png') }}"
+                      alt="" />
+                  </div>
+                  <input
+                    class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] dark:text-white"
+                    id="password" name="password" type="password" placeholder="Password" value="" />
+                </div>
+              </div>
+
+              <div>
+                <label class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white">
+                  Domain
+                </label>
+
+                <!-- <div
+                    class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-white px-[14px] py-[8px] dark:border-neutral-700 dark:bg-neutral-900">
+                    <div>
+                      <img width="20" height="20"
+                        src="{{ url_for('static', filename='addons/main/static/static_v3/img/simplicity-icon-unlock.png') }}"
+                        alt="" />
+                    </div>
+                    <input
+                      class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] dark:text-white"
+                      id="domain" name="domain" type="text" placeholder="Domain" value="" />
+                  </div> -->
+
+                <div class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-white px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900">
+                  <select
+                    class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white"
+                    name="domain">
+                    <option value="pt-bjp">PT-BJP</option>
+                    <option value="pt-bjs">PT-BJS</option>
+                  </select>
+                </div>
+              </div>
+
+            </div>
+
+            <button
+              class="block w-full rounded-[8px] border border-primary-600 bg-primary-600 px-[18px] py-[10px] text-center font-medium leading-[24px] text-white dark:border-secondary-600 dark:bg-secondary-600 dark:text-neutral-800"
+              type="submit">
+              Sign In
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    localStorage.clear();
+  </script>
+  {% endblock body %}

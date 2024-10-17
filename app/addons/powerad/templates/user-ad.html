@@ -1,0 +1,54 @@
+{% extends "base_template/base.html" %}
+{% block containerfluid %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">AD Account Queue</h3>
+            </div>
+            <div class="card-body table-responsive p-0">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Department</th>
+                            <th>Position</th>
+                            <th>Email</th>
+                            <!-- <th>Distinguishedname</th> -->
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size: 14px;">
+                        {% for user in users_from_ad %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <!-- <td> user.lastname.replace("–", "-").split("-")[0].strip() </td> -->
+                            <td>{{ user.lastname }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.department }}</td>
+                            <td>{{ user.position }}</td>
+                            <td>{{ user.email_domain }}</td>
+                            <!-- <td></td> -->
+                            <td><a href="{{ url_for('powerad.export_user', username=user.username) }}">Export</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- flash -->
+{% with errors = get_flashed_messages(category_filter=["ready"]) %}
+{% if errors %}
+<script>
+    alert(`{{ errors[0] }}`)
+</script>
+{% endif %}
+{% endwith %}
+<!-- endflash -->
+
+{% endblock %}

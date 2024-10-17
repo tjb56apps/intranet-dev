@@ -1,0 +1,18 @@
+services:
+    app:
+        container_name: fw_intranet
+        build:
+            context: .
+        ports:
+          -  "5111:5000"
+          
+        # develop:
+        #   watch:
+        #     - action: sync
+        #       path: .
+        #       target: /home
+
+        volumes:
+          - type: bind
+            source: .
+            target: /home

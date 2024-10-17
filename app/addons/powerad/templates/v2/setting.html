@@ -1,0 +1,79 @@
+{% extends "base_template/v2/baseV2.html" %}
+{% block title %}Setting{% endblock title %}
+{% block containerfluid %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Setting & manage permissions server</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form role="form" action="{{ url_for('powerad.change_settings') }}" method="post">
+                <div class="box-body">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" name="username" id="username"
+                                value="{{ data_server.username }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" name="password" id="password"
+                                placeholder="************" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="server">Server (ex. pt-bjp.co.id)</label>
+                            <input type="text" class="form-control" name="server" id="server"
+                                value="{{ data_server.server }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="adsi">ADSI (ex. CN=Users)</label>
+                            <input type="text" class="form-control" name="adsi" id="adsi"
+                                value="{{ data_server.oubase }}">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <!-- table display server -->
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Server Information</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th style="width: 10px">#</th>
+                            <th>Domain/ Server</th>
+                            <th>Port</th>
+                            <th>Ping</th>
+                            <th style="width: 40px">Action</th>
+                        </tr>
+                        {% for server in server_list %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ server.domain }}</td>
+                            <td>{{ server.port }}</td>
+                            <td><a href="#">Click me!</a></td>
+                            <td><a href="#">Delete</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+</div>
+{% endblock containerfluid %}

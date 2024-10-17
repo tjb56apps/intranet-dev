@@ -1,0 +1,1162 @@
+{% extends "base_template/base_merge_template_v3/index.html" %}
+{% block custom_style %}
+<!-- Alpine Cloak -->
+<style>
+    [x-cloak] {
+        display: none !important;
+    }
+</style>
+{% endblock custom_style %}
+{% block body %}
+
+<body class="flex min-h-screen bg-info-100 font-poppins antialiased dark:bg-[#0F172A]"
+    x-data="$store.preference.chipManager">
+    <!-- start: Sidebar -->
+
+    <div class="fixed z-10 h-full w-full bg-[#101828]/[.24] lg:relative lg:block lg:h-auto lg:w-auto lg:bg-none" :class="{
+      'block': $store.preference.viewport.current === 'small' && $store.preference.sidebar.isMaximize(),
+      'hidden': $store.preference.viewport.current === 'small' && $store.preference.sidebar.isMinimize()
+    }">
+        <aside class="h-full overflow-y-auto bg-white transition-all dark:bg-neutral-800 lg:overflow-visible" :class="{
+        'min-w-[304px] max-w-[304px]': $store.preference.sidebar.isMaximize(),
+        'min-w-[84px] max-w-[84px]': $store.preference.sidebar.isMinimize()
+      }">
+            <div class="mb-[22px] ml-[12px] flex flex-row items-center justify-between pt-[22px]" :class="{
+          'lg:justify-left': $store.preference.sidebar.isMaximize(),
+          'lg:justify-center': $store.preference.sidebar.isMinimize()
+        }">
+                <!-- Brand -->
+                <a href="/" data-chip-label="Dashboard">
+                    <img class="h-[28px] w-auto" :class="$store.preference.sidebar.isMinimize() ? 'mx-auto' : null"
+                        width="auto" height="28"
+                        src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-full.svg') }}"
+                        :src="
+              if ($store.preference.sidebar.isMinimize()) {
+                  return '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-single.png') }}';
+              }
+              return $store.preference.theme.isDark ? '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-full-dark.svg') }}' : '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-full.svg') }}';
+            " alt="Bhumi Simplicity Brand Logo" x-cloak />
+                </a>
+                <!-- End of Brand -->
+
+                <button class="mr-[6px] block lg:hidden" @click="$store.preference.sidebar.toggle()">
+                    <img width="20" height="20"
+                        src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-hamburger.png') }}"
+                        alt="Click here to toggle sidebar menu" />
+                </button>
+            </div>
+
+            <!-- Mini App Bar -->
+            <div class="mb-[22px] px-[12px]">
+                <form
+                    class="flex items-center gap-[8px] rounded-[12px] border border-neutral-400 bg-neutral-200 py-[8px] dark:border-neutral-700 dark:bg-neutral-900"
+                    :class="{
+      'h-[40px]': $store.preference.sidebar.isMinimize(),
+      'pl-[14px] pr-[12px]' : $store.preference.sidebar.isMaximize()
+    }" @click="$store.preference.appmenu.open($event)">
+                    <input
+                        class="w-full bg-transparent leading-[24px] outline-none placeholder:text-neutral-800 dark:text-white dark:placeholder:text-[#99A3B6]"
+                        type="text" placeholder="Search" x-show="$store.preference.sidebar.isMaximize()" />
+                    <div class="min-h-[16px] min-w-[44px]" :class="{
+        'flex-1': $store.preference.sidebar.isMinimize(),
+        'flex-grow-0': $store.preference.sidebar.isMaximize(),
+      }">
+                        <img class="mx-auto" width="16" height="16"
+                            src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-search-inactive.png') }}"
+                            alt="Search" />
+                    </div>
+                </form>
+            </div>
+            <!-- End of Mini App Bar -->
+
+            <!-- Sidebar Menu Block -->
+            <div class="space-y-[20px]" x-cloak>
+                <div class="flex flex-col gap-[8px]"
+                    :class="isVisible ? 'bg-transparent dark:bg-transparent' : 'bg-transparent'" x-data="collapsible">
+                    <!-- logic dashboard -->
+                    {% if path == "/dashboard" %}
+                    <!-- dashboard condition 1 -->
+                    <button data-chip-label="Dashboard" @click="toggle">
+                        <div class="group mx-[12px] flex flex-row whitespace-nowrap rounded-[12px] {% if path == '/dashboard' %}bg-primary-800{% else %}bg-transparent{% endif %} py-[10px] dark:bg-neutral-900"
+                            :class="{ '': $store.preference.sidebar.isMaximize() }" x-data="{ 
+      icon: { active: 'app/static/static_template_v3/img/simplicity-icon-dashboard-active-2.png', 
+      inactive: 'app/static/static_template_v3/img/simplicity-icon-dashboard-inactive-2.png',
+      dark_active: 'app/static/static_template_v3/img/simplicity-icon-dashboard-active-2.png',
+      dark_inactive: 'app/static/static_template_v3/img/simplicity-icon-dashboard-inactive-2.png' 
+      } 
+    }">
+                            <div class="h-[36px] min-w-[7px] rounded-[25px] {% if path == '/dashboard' %}bg-secondary-600{% else %}bg-transparent{% endif %}"
+                                :class="{
+        'mr-[26px]': $store.preference.sidebar.isMaximize(),
+        'mr-[10px]': $store.preference.sidebar.isMinimize()
+      }"></div>
+                            <div class="relative flex flex-1 flex-row items-center">
+                                <img class="min-w-[20px] max-w-[20px]"
+                                    :class="{ 'mr-[12px]': $store.preference.sidebar.isMaximize() }" width="20"
+                                    height="20"
+                                    :src="$store.preference.theme.isDark ? (isVisible ? icon.dark_active : icon.dark_inactive) : (isVisible ? icon.active : icon.inactive)"
+                                    alt="Dashboard icon inactive" />
+                                <p class="absolute ml-[58px] hidden rounded-[8px] bg-secondary-600 px-[12px] py-[8px] text-[14px] leading-[20px] text-white before:absolute before:-ml-[14px] before:mt-[4px] before:block before:h-[12px] before:w-[12px] before:rotate-45 before:bg-secondary-600 before:content-[''] dark:before:bg-secondary-600"
+                                    :class="{ 'group-hover:block': $store.preference.sidebar.isMinimize() }">
+                                    Dashboard
+                                </p>
+
+                                <p class="font-medium leading-[24px] {% if path == '/dashboard' %}text-white{% else %}text-neutral-800{% endif %} dark:text-[#99A3B6]"
+                                    :class="{
+          'first:first-letter:text-secondary-600 first:first-letter:dark:text-secondary-600 first:first-letter:text-base dark:first:first-letter:text-neutral-400 text-transparent text-[0px]': $store.preference.sidebar.isMinimize()
+        }">
+                                    Dashboard
+                                </p>
+
+
+                                <img class="ml-auto mr-[20px] max-h-[20px] max-w-[20px]"
+                                    :class="isCollapsed ? 'rotate-0' : 'rotate-90'"
+                                    src="app/static/static_template_v3/img/simplicity-icon-caret-inactive-2.png"
+                                    alt="Caret" />
+
+                            </div>
+                        </div>
+                    </button>
+
+                    <div class="mx-[12px] rounded-[12px] bg-info-100 dark:bg-neutral-900">
+                        <div class="space-y-[8px]" x-cloak x-collapse x-show="isVisible">
+                            <div>
+                                <div class="group mx-[12px] flex flex-row whitespace-nowrap rounded-[12px] bg-transparent py-[10px]"
+                                    :class="{ '': $store.preference.sidebar.isMaximize() }" x-data="{ 
+      icon: { active: 'app/static/static_template_v3/img/simplicity-icon-briefcase.png', 
+      inactive: 'app/static/static_template_v3/img/simplicity-icon-briefcase.png',
+      dark_active: 'app/static/static_template_v3/img/simplicity-icon-briefcase-2.png',
+      dark_inactive: 'app/static/static_template_v3/img/simplicity-icon-briefcase-2.png' 
+      } 
+    }">
+                                    <div class="h-[36px] min-w-[7px] rounded-[25px] bg-transparent" :class="{
+        'mr-[26px]': $store.preference.sidebar.isMaximize(),
+        'mr-[0px]': $store.preference.sidebar.isMinimize()
+      }"></div>
+                                    <div class="relative flex flex-1 flex-row items-center">
+                                        <img class="min-w-[20px] max-w-[20px]"
+                                            :class="{ 'mr-[12px]': $store.preference.sidebar.isMaximize() }" width="20"
+                                            height="20"
+                                            :src="$store.preference.theme.isDark ? (isVisible ? icon.dark_active : icon.dark_inactive) : (isVisible ? icon.active : icon.inactive)"
+                                            alt="Dashboard icon inactive" />
+                                        <p class="absolute ml-[58px] hidden rounded-[8px] bg-secondary-600 px-[12px] py-[8px] text-[14px] leading-[20px] text-white before:absolute before:-ml-[14px] before:mt-[4px] before:block before:h-[12px] before:w-[12px] before:rotate-45 before:bg-secondary-600 before:content-[''] dark:before:bg-secondary-600"
+                                            :class="{ 'group-hover:block': $store.preference.sidebar.isMinimize() }">
+                                            HSE
+                                        </p>
+
+                                        <p class="font-medium leading-[24px] text-neutral-800 dark:text-[#99A3B6]"
+                                            :class="{
+          'first:first-letter:text-secondary-600 first:first-letter:dark:text-secondary-600 first:first-letter:text-base dark:first:first-letter:text-neutral-400 text-transparent text-[0px]': $store.preference.sidebar.isMinimize()
+        }">
+                                            HSE
+                                        </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cursor-grab active:cursor-grabbing active:select-none" draggable="true"
+                                x-on:dragstart="
+                  event.dataTransfer.setData('application/json', JSON.stringify({
+                    name: 'hse_lagging_indicator',
+                    label: 'HSE Lagging Indicator'
+                  }))
+                ">
+                                <div class="group mx-[12px] flex flex-row whitespace-nowrap rounded-[12px] bg-transparent py-[10px]"
+                                    :class="{ 'ml-[16px]': $store.preference.sidebar.isMaximize() }" x-data="{ 
+      icon: { active: 'app/static/static_template_v3/img/simplicity-icon-chart.png', 
+      inactive: 'app/static/static_template_v3/img/simplicity-icon-chart.png',
+      dark_active: 'app/static/static_template_v3/img/simplicity-icon-chart-2.png',
+      dark_inactive: 'app/static/static_template_v3/img/simplicity-icon-chart-2.png' 
+      } 
+    }">
+                                    <div class="h-[36px] min-w-[7px] rounded-[25px] bg-transparent" :class="{
+        'mr-[26px]': $store.preference.sidebar.isMaximize(),
+        'mr-[0px]': $store.preference.sidebar.isMinimize()
+      }"></div>
+                                    <div class="relative flex flex-1 flex-row items-center">
+                                        <img class="min-w-[20px] max-w-[20px]"
+                                            :class="{ 'mr-[12px]': $store.preference.sidebar.isMaximize() }" width="20"
+                                            height="20"
+                                            :src="$store.preference.theme.isDark ? (isVisible ? icon.dark_active : icon.dark_inactive) : (isVisible ? icon.active : icon.inactive)"
+                                            alt="Dashboard icon inactive" />
+                                        <p class="absolute ml-[58px] hidden rounded-[8px] bg-secondary-600 px-[12px] py-[8px] text-[14px] leading-[20px] text-white before:absolute before:-ml-[14px] before:mt-[4px] before:block before:h-[12px] before:w-[12px] before:rotate-45 before:bg-secondary-600 before:content-[''] dark:before:bg-secondary-600"
+                                            :class="{ 'group-hover:block': $store.preference.sidebar.isMinimize() }">
+                                            HSE Lagging Indicator
+                                        </p>
+
+                                        <p class="font-medium leading-[24px] text-neutral-800 dark:text-[#99A3B6]"
+                                            :class="{
+          'first:first-letter:text-secondary-600 first:first-letter:dark:text-secondary-600 first:first-letter:text-base dark:first:first-letter:text-neutral-400 text-transparent text-[0px]': $store.preference.sidebar.isMinimize()
+        }">
+                                            HSE Lagging Indicator
+                                        </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-[8px]" x-cloak x-collapse x-show="isVisible">
+                            <div>
+                                <div class="group mx-[12px] flex flex-row whitespace-nowrap rounded-[12px] bg-transparent py-[10px]"
+                                    :class="{ '': $store.preference.sidebar.isMaximize() }" x-data="{ 
+      icon: { active: 'app/static/static_template_v3/img/simplicity-icon-briefcase.png', 
+      inactive: 'app/static/static_template_v3/img/simplicity-icon-briefcase.png',
+      dark_active: 'app/static/static_template_v3/img/simplicity-icon-briefcase-2.png',
+      dark_inactive: 'app/static/static_template_v3/img/simplicity-icon-briefcase-2.png' 
+      } 
+    }">
+                                    <div class="h-[36px] min-w-[7px] rounded-[25px] bg-transparent" :class="{
+        'mr-[26px]': $store.preference.sidebar.isMaximize(),
+        'mr-[0px]': $store.preference.sidebar.isMinimize()
+      }"></div>
+                                    <div class="relative flex flex-1 flex-row items-center">
+                                        <img class="min-w-[20px] max-w-[20px]"
+                                            :class="{ 'mr-[12px]': $store.preference.sidebar.isMaximize() }" width="20"
+                                            height="20"
+                                            :src="$store.preference.theme.isDark ? (isVisible ? icon.dark_active : icon.dark_inactive) : (isVisible ? icon.active : icon.inactive)"
+                                            alt="Dashboard icon inactive" />
+                                        <p class="absolute ml-[58px] hidden rounded-[8px] bg-secondary-600 px-[12px] py-[8px] text-[14px] leading-[20px] text-white before:absolute before:-ml-[14px] before:mt-[4px] before:block before:h-[12px] before:w-[12px] before:rotate-45 before:bg-secondary-600 before:content-[''] dark:before:bg-secondary-600"
+                                            :class="{ 'group-hover:block': $store.preference.sidebar.isMinimize() }">
+                                            Operation
+                                        </p>
+
+                                        <p class="font-medium leading-[24px] text-neutral-800 dark:text-[#99A3B6]"
+                                            :class="{
+          'first:first-letter:text-secondary-600 first:first-letter:dark:text-secondary-600 first:first-letter:text-base dark:first:first-letter:text-neutral-400 text-transparent text-[0px]': $store.preference.sidebar.isMinimize()
+        }">
+                                            Operation
+                                        </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cursor-grab active:cursor-grabbing active:select-none" draggable="true"
+                                x-on:dragstart="
+                  event.dataTransfer.setData('application/json', JSON.stringify({
+                    name: 'ppi_availability',
+                    label: 'Power Plant Availability'
+                  }))
+                ">
+                                <div class="group mx-[12px] flex flex-row whitespace-nowrap rounded-[12px] bg-transparent py-[10px]"
+                                    :class="{ 'ml-[16px]': $store.preference.sidebar.isMaximize() }" x-data="{ 
+      icon: { active: 'app/static/static_template_v3/img/simplicity-icon-chart.png', 
+      inactive: 'app/static/static_template_v3/img/simplicity-icon-chart.png',
+      dark_active: 'app/static/static_template_v3/img/simplicity-icon-chart-2.png',
+      dark_inactive: 'app/static/static_template_v3/img/simplicity-icon-chart-2.png' 
+      } 
+    }">
+                                    <div class="h-[36px] min-w-[7px] rounded-[25px] bg-transparent" :class="{
+        'mr-[26px]': $store.preference.sidebar.isMaximize(),
+        'mr-[0px]': $store.preference.sidebar.isMinimize()
+      }"></div>
+                                    <div class="relative flex flex-1 flex-row items-center">
+                                        <img class="min-w-[20px] max-w-[20px]"
+                                            :class="{ 'mr-[12px]': $store.preference.sidebar.isMaximize() }" width="20"
+                                            height="20"
+                                            :src="$store.preference.theme.isDark ? (isVisible ? icon.dark_active : icon.dark_inactive) : (isVisible ? icon.active : icon.inactive)"
+                                            alt="Dashboard icon inactive" />
+                                        <p class="absolute ml-[58px] hidden rounded-[8px] bg-secondary-600 px-[12px] py-[8px] text-[14px] leading-[20px] text-white before:absolute before:-ml-[14px] before:mt-[4px] before:block before:h-[12px] before:w-[12px] before:rotate-45 before:bg-secondary-600 before:content-[''] dark:before:bg-secondary-600"
+                                            :class="{ 'group-hover:block': $store.preference.sidebar.isMinimize() }">
+                                            Power Plant Availability
+                                        </p>
+
+                                        <p class="font-medium leading-[24px] text-neutral-800 dark:text-[#99A3B6]"
+                                            :class="{
+          'first:first-letter:text-secondary-600 first:first-letter:dark:text-secondary-600 first:first-letter:text-base dark:first:first-letter:text-neutral-400 text-transparent text-[0px]': $store.preference.sidebar.isMinimize()
+        }">
+                                            Power Plant Availability
+                                        </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-[8px]" x-cloak x-collapse x-show="isVisible">
+                            <div>
+                                <div class="group mx-[12px] flex flex-row whitespace-nowrap rounded-[12px] bg-transparent py-[10px]"
+                                    :class="{ '': $store.preference.sidebar.isMaximize() }" x-data="{ 
+      icon: { active: 'app/static/static_template_v3/img/simplicity-icon-briefcase.png', 
+      inactive: 'app/static/static_template_v3/img/simplicity-icon-briefcase.png',
+      dark_active: 'app/static/static_template_v3/img/simplicity-icon-briefcase-2.png',
+      dark_inactive: 'app/static/static_template_v3/img/simplicity-icon-briefcase-2.png' 
+      } 
+    }">
+                                    <div class="h-[36px] min-w-[7px] rounded-[25px] bg-transparent" :class="{
+        'mr-[26px]': $store.preference.sidebar.isMaximize(),
+        'mr-[0px]': $store.preference.sidebar.isMinimize()
+      }"></div>
+                                    <div class="relative flex flex-1 flex-row items-center">
+                                        <img class="min-w-[20px] max-w-[20px]"
+                                            :class="{ 'mr-[12px]': $store.preference.sidebar.isMaximize() }" width="20"
+                                            height="20"
+                                            :src="$store.preference.theme.isDark ? (isVisible ? icon.dark_active : icon.dark_inactive) : (isVisible ? icon.active : icon.inactive)"
+                                            alt="Dashboard icon inactive" />
+                                        <p class="absolute ml-[58px] hidden rounded-[8px] bg-secondary-600 px-[12px] py-[8px] text-[14px] leading-[20px] text-white before:absolute before:-ml-[14px] before:mt-[4px] before:block before:h-[12px] before:w-[12px] before:rotate-45 before:bg-secondary-600 before:content-[''] dark:before:bg-secondary-600"
+                                            :class="{ 'group-hover:block': $store.preference.sidebar.isMinimize() }">
+                                            HRGA
+                                        </p>
+
+                                        <p class="font-medium leading-[24px] text-neutral-800 dark:text-[#99A3B6]"
+                                            :class="{
+          'first:first-letter:text-secondary-600 first:first-letter:dark:text-secondary-600 first:first-letter:text-base dark:first:first-letter:text-neutral-400 text-transparent text-[0px]': $store.preference.sidebar.isMinimize()
+        }">
+                                            HRGA
+                                        </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cursor-grab active:cursor-grabbing active:select-none" draggable="true"
+                                x-on:dragstart="
+                  event.dataTransfer.setData('application/json', JSON.stringify({
+                    name: 'it_budget_monitoring',
+                    label: 'IT Budget Monitoring'
+                  }))
+                ">
+                                <div class="group mx-[12px] flex flex-row whitespace-nowrap rounded-[12px] bg-transparent py-[10px]"
+                                    :class="{ 'ml-[16px]': $store.preference.sidebar.isMaximize() }" x-data="{ 
+      icon: { active: 'app/static/static_template_v3/img/simplicity-icon-chart.png', 
+      inactive: 'app/static/static_template_v3/img/simplicity-icon-chart.png',
+      dark_active: 'app/static/static_template_v3/img/simplicity-icon-chart-2.png',
+      dark_inactive: 'app/static/static_template_v3/img/simplicity-icon-chart-2.png' 
+      } 
+    }">
+                                    <div class="h-[36px] min-w-[7px] rounded-[25px] bg-transparent" :class="{
+        'mr-[26px]': $store.preference.sidebar.isMaximize(),
+        'mr-[0px]': $store.preference.sidebar.isMinimize()
+      }"></div>
+                                    <div class="relative flex flex-1 flex-row items-center">
+                                        <img class="min-w-[20px] max-w-[20px]"
+                                            :class="{ 'mr-[12px]': $store.preference.sidebar.isMaximize() }" width="20"
+                                            height="20"
+                                            :src="$store.preference.theme.isDark ? (isVisible ? icon.dark_active : icon.dark_inactive) : (isVisible ? icon.active : icon.inactive)"
+                                            alt="Dashboard icon inactive" />
+                                        <p class="absolute ml-[58px] hidden rounded-[8px] bg-secondary-600 px-[12px] py-[8px] text-[14px] leading-[20px] text-white before:absolute before:-ml-[14px] before:mt-[4px] before:block before:h-[12px] before:w-[12px] before:rotate-45 before:bg-secondary-600 before:content-[''] dark:before:bg-secondary-600"
+                                            :class="{ 'group-hover:block': $store.preference.sidebar.isMinimize() }">
+                                            IT Budget Monitoring
+                                        </p>
+
+                                        <p class="font-medium leading-[24px] text-neutral-800 dark:text-[#99A3B6]"
+                                            :class="{
+          'first:first-letter:text-secondary-600 first:first-letter:dark:text-secondary-600 first:first-letter:text-base dark:first:first-letter:text-neutral-400 text-transparent text-[0px]': $store.preference.sidebar.isMinimize()
+        }">
+                                            IT Budget Monitoring
+                                        </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end dashboard condition 1 -->
+                    {% else %}
+                    <!-- dashboard condition 2 -->
+                    <a href="/" data-chip-label="Dashboard" @click="toggle">
+
+                        <div class="py-[10px] mx-[12px] rounded-[12px] group flex flex-row whitespace-nowrap bg-transparent "
+                            :class="{ '': $store.preference.sidebar.isMaximize() }"
+                            x-data="{ icon: { active: 'app/static/static_template_v3/img/simplicity-icon-dashboard-active.png', inactive: '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-dashboard-inactive.png') }}' } }">
+                            <div class="h-[36px] min-w-[7px] rounded-[25px] bg-transparent mr-[26px]" :class="{
+                  'mr-[26px]': $store.preference.sidebar.isMaximize(),
+                  'mr-[10px]': $store.preference.sidebar.isMinimize()
+                }"></div>
+                            <div class="relative flex flex-1 flex-row items-center">
+
+                                <img class="min-w-[20px] max-w-[20px] mr-[12px]"
+                                    :class="{ 'mr-[12px]': $store.preference.sidebar.isMaximize() }" width="20"
+                                    height="20" :src="isVisible ? icon.active : icon.inactive"
+                                    alt="Dashboard icon inactive"
+                                    src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-dashboard-inactive.png') }}">
+                                <p class="absolute ml-[58px] hidden rounded-[8px] bg-secondary-600 px-[12px] py-[8px] text-[14px] leading-[20px] text-white before:absolute before:-ml-[14px] before:mt-[4px] before:block before:h-[12px] before:w-[12px] before:rotate-45 before:bg-secondary-600 before:content-[''] dark:bg-secondary-600 dark:text-neutral-900 dark:before:bg-secondary-600"
+                                    :class="{ 'group-hover:block': $store.preference.sidebar.isMinimize() }">
+                                    Dashboard
+                                </p>
+
+
+                                <p class="font-medium leading-[24px] dark:text-[#99A3B6] text-neutral-800" :class="{
+                    'first:first-letter:text-secondary-600 first:first-letter:text-base dark:first:first-letter:text-neutral-400 text-transparent text-[0px]': $store.preference.sidebar.isMinimize()
+                  }">
+                                    Dashboard
+                                </p>
+
+                                <!-- Toggle Icon -->
+
+                                <!-- End of Toggle Icon -->
+                            </div>
+                        </div>
+
+                    </a>
+                    <!-- end dashboard condition 2 -->
+                    {% endif %}
+                    <!-- logic dashboard -->
+                </div>
+
+                <!-- Application Menu -->
+                {% if addons %}
+                <div class="flex flex-col gap-[8px]"
+                    :class="isVisible ? 'bg-transparent dark:bg-transparent' : 'bg-transparent'" x-data="collapsible">
+                    <button @click="toggle">
+                        <div class="group mx-[12px] flex flex-row whitespace-nowrap rounded-[12px] {% if path == '/ad-account-queue' %}bg-primary-800{% else %}bg-transparent{% endif %} py-[10px]"
+                            :class="{ '': $store.preference.sidebar.isMaximize() }" x-data="{ 
+      icon: { active: 'app/static/static_template_v3/img/simplicity-icon-app-inactive.png', 
+      inactive: 'app/static/static_template_v3/img/simplicity-icon-app-inactive-2.png',
+      dark_active: 'app/static/static_template_v3/img/simplicity-icon-app-active-2.png',
+      dark_inactive: 'app/static/static_template_v3/img/simplicity-icon-app-inactive-2.png' 
+      } 
+    }">
+                            <div class="h-[36px] min-w-[7px] rounded-[25px] {% if path == '/ad-account-queue' %}bg-secondary-600{% else %}bg-transparent{% endif %}"
+                                :class="{
+        'mr-[26px]': $store.preference.sidebar.isMaximize(),
+        'mr-[10px]': $store.preference.sidebar.isMinimize()
+      }"></div>
+                            <div class="relative flex flex-1 flex-row items-center">
+                                <img class="min-w-[20px] max-w-[20px]"
+                                    :class="{ 'mr-[12px]': $store.preference.sidebar.isMaximize() }" width="20"
+                                    height="20"
+                                    :src="$store.preference.theme.isDark ? (isVisible ? icon.dark_active : icon.dark_inactive) : (isVisible ? icon.active : icon.inactive)"
+                                    alt="Dashboard icon inactive" />
+                                <p class="absolute ml-[58px] hidden rounded-[8px] bg-secondary-600 px-[12px] py-[8px] text-[14px] leading-[20px] text-white before:absolute before:-ml-[14px] before:mt-[4px] before:block before:h-[12px] before:w-[12px] before:rotate-45 before:bg-secondary-600 before:content-[''] dark:before:bg-secondary-600"
+                                    :class="{ 'group-hover:block': $store.preference.sidebar.isMinimize() }">
+                                    Application
+                                </p>
+
+                                <p class="font-medium leading-[24px] {% if path == '/ad-account-queue' %}text-white{% else %}text-neutral-800{% endif %} dark:text-[#99A3B6]"
+                                    :class="{
+          'first:first-letter:text-secondary-600 first:first-letter:dark:text-secondary-600 first:first-letter:text-base dark:first:first-letter:text-neutral-400 text-transparent text-[0px]': $store.preference.sidebar.isMinimize()
+        }">
+                                    Application {% if get_level(session["username"]) == "administrator" %}[ {{
+                                    nav_length()|length }} ]{% elif get_level(session["username"]) == "user" %}[ {{
+                                    get_apps(session["username"])|length }} ]{% endif %}
+                                </p>
+
+                                <!-- Toggle Icon -->
+
+                                <img class="ml-auto mr-[20px] max-h-[20px] max-w-[20px]"
+                                    :class="{% if path == '/ad-account-queue' %}!isCollapsed{% else %}isCollapsed{% endif %} ? 'rotate-0' : 'rotate-90'"
+                                    src="app/static/static_template_v3/img/simplicity-icon-caret-inactive-2.png"
+                                    alt="Caret" />
+
+                                <!-- End of Toggle Icon -->
+                            </div>
+                        </div>
+                    </button>
+
+                    <div class="mx-[12px] rounded-[12px] bg-info-100 dark:bg-neutral-900">
+                        <div class="space-y-[8px]" x-cloak x-collapse x-show="isVisible">
+
+                            <!-- main menu -->
+                            {% if get_level(session["username"]) == "administrator" %}
+                            {% for addon in addons %}
+                            {% if addon["status"] %}
+                            <a class="block" href="/{{ addon['path'] }}" data-chip-label="{{ addon.name }}">
+                                <div class="group mx-[12px] flex flex-row whitespace-nowrap rounded-[12px] bg-transparent py-[10px]"
+                                    :class="{ '': $store.preference.sidebar.isMaximize() }" x-data="{ 
+                      icon: { active: 'app/static/static_template_v3/img/simplicity-icon-search-inactive.png', 
+                      inactive: 'app/static/static_template_v3/img/simplicity-icon-search-inactive.png',
+                      dark_active: 'app/static/static_template_v3/img/simplicity-icon-search-inactive-2.png',
+                      dark_inactive: 'app/static/static_template_v3/img/simplicity-icon-search-inactive-2.png' 
+                      } 
+                    }">
+                                    <div class="h-[36px] min-w-[7px] rounded-[25px] bg-transparent" :class="{
+                        'mr-[26px]': $store.preference.sidebar.isMaximize(),
+                        'mr-[0px]': $store.preference.sidebar.isMinimize()
+                      }"></div>
+                                    <div class="relative flex flex-1 flex-row items-center">
+                                        <img class="min-w-[20px] max-w-[20px]"
+                                            :class="{ 'mr-[12px]': $store.preference.sidebar.isMaximize() }" width="20"
+                                            height="20"
+                                            :src="$store.preference.theme.isDark ? (isVisible ? icon.dark_active : icon.dark_inactive) : (isVisible ? icon.active : icon.inactive)"
+                                            alt="Dashboard icon inactive" />
+                                        <p class="absolute ml-[58px] hidden rounded-[8px] bg-secondary-600 px-[12px] py-[8px] text-[14px] leading-[20px] text-white before:absolute before:-ml-[14px] before:mt-[4px] before:block before:h-[12px] before:w-[12px] before:rotate-45 before:bg-secondary-600 before:content-[''] dark:before:bg-secondary-600"
+                                            :class="{ 'group-hover:block': $store.preference.sidebar.isMinimize() }">
+                                            {{ addon["name"] }}
+                                        </p>
+
+                                        <p class="font-medium leading-[24px] text-neutral-800 dark:text-[#99A3B6]"
+                                            :class="{
+                          'first:first-letter:text-secondary-600 first:first-letter:dark:text-secondary-600 first:first-letter:text-base dark:first:first-letter:text-neutral-400 text-transparent text-[0px]': $store.preference.sidebar.isMinimize()
+                        }">
+                                            {{ addon["name"] }}
+                                        </p>
+
+                                        <!-- Toggle Icon -->
+
+                                        <!-- End of Toggle Icon -->
+                                    </div>
+                                </div>
+                            </a>
+                            {% endif %}
+                            {% endfor %}
+                            {% elif get_level(session["username"]) == "user" %}
+                            {% for addon in get_apps(session["username"]) %}
+                            <a class="block" href="/{{ addon.path }}" data-chip-label="{{ addon.name }}">
+                                <div class="group mx-[12px] flex flex-row whitespace-nowrap rounded-[12px] bg-transparent py-[10px]"
+                                    :class="{ '': $store.preference.sidebar.isMaximize() }" x-data="{ 
+                      icon: { active: 'app/static/static_template_v3/img/simplicity-icon-search-inactive.png', 
+                      inactive: 'app/static/static_template_v3/img/simplicity-icon-search-inactive.png',
+                      dark_active: 'app/static/static_template_v3/img/simplicity-icon-search-inactive-2.png',
+                      dark_inactive: 'app/static/static_template_v3/img/simplicity-icon-search-inactive-2.png' 
+                      } 
+                    }">
+                                    <div class="h-[36px] min-w-[7px] rounded-[25px] bg-transparent" :class="{
+                        'mr-[26px]': $store.preference.sidebar.isMaximize(),
+                        'mr-[0px]': $store.preference.sidebar.isMinimize()
+                      }"></div>
+                                    <div class="relative flex flex-1 flex-row items-center">
+                                        <img class="min-w-[20px] max-w-[20px]"
+                                            :class="{ 'mr-[12px]': $store.preference.sidebar.isMaximize() }" width="20"
+                                            height="20"
+                                            :src="$store.preference.theme.isDark ? (isVisible ? icon.dark_active : icon.dark_inactive) : (isVisible ? icon.active : icon.inactive)"
+                                            alt="Dashboard icon inactive" />
+                                        <p class="absolute ml-[58px] hidden rounded-[8px] bg-secondary-600 px-[12px] py-[8px] text-[14px] leading-[20px] text-white before:absolute before:-ml-[14px] before:mt-[4px] before:block before:h-[12px] before:w-[12px] before:rotate-45 before:bg-secondary-600 before:content-[''] dark:before:bg-secondary-600"
+                                            :class="{ 'group-hover:block': $store.preference.sidebar.isMinimize() }">
+                                            {{ addon.name }}
+                                        </p>
+
+                                        <p class="font-medium leading-[24px] text-neutral-800 dark:text-[#99A3B6]"
+                                            :class="{
+                          'first:first-letter:text-secondary-600 first:first-letter:dark:text-secondary-600 first:first-letter:text-base dark:first:first-letter:text-neutral-400 text-transparent text-[0px]': $store.preference.sidebar.isMinimize()
+                        }">
+                                            {{ addon.name }}
+                                        </p>
+
+                                        <!-- Toggle Icon -->
+
+                                        <!-- End of Toggle Icon -->
+                                    </div>
+                                </div>
+                            </a>
+                            {% endfor %}
+                            {% endif %}
+
+                        </div>
+                    </div>
+
+                </div>
+                {% endif %}
+                <!-- End of Application Menu -->
+
+                {% if get_level(session["username"]) == "administrator" %}
+                {% if status %}
+                <div x-data="collapsible">
+                    <div class="group mx-[12px] flex flex-row whitespace-nowrap rounded-[12px] bg-transparent py-[10px]"
+                        :class="{ '': $store.preference.sidebar.isMaximize() }" x-data="{ 
+      icon: { active: '', 
+      inactive: '',
+      dark_active: '',
+      dark_inactive: '' 
+      } 
+    }">
+                        <div class="h-[36px] min-w-[7px] rounded-[25px] bg-transparent" :class="{
+        'mr-[26px]': $store.preference.sidebar.isMaximize(),
+        'mr-[10px]': $store.preference.sidebar.isMinimize()
+      }"></div>
+                        <div class="relative flex flex-1 flex-row items-center">
+                            <p class="font-medium leading-[24px] text-neutral-800 text-secondary-600 dark:text-[#99A3B6] dark:text-secondary-600"
+                                :class="{
+          'first:first-letter:text-secondary-600 first:first-letter:dark:text-secondary-600 first:first-letter:text-base dark:first:first-letter:text-neutral-400 text-transparent text-[0px]': $store.preference.sidebar.isMinimize()
+        }">
+                                ADMINISTRATOR
+                            </p>
+
+                            <!-- Toggle Icon -->
+
+                            <!-- End of Toggle Icon -->
+                        </div>
+                    </div>
+                </div>
+
+                <a class="block" href="/users" x-data="collapsible" data-chip-label="Users">
+                    <div class="group mx-[12px] flex flex-row whitespace-nowrap rounded-[12px] {% if path == '/users' %}bg-primary-800{% else %}bg-transparent{% endif %} py-[10px]"
+                        :class="{ '': $store.preference.sidebar.isMaximize() }" x-data="{ 
+      icon: { active: 'app/static/static_template_v3/img/simplicity-icon-user-inactive.png', 
+      inactive: 'app/static/static_template_v3/img/simplicity-icon-user-inactive.png',
+      dark_active: 'app/static/static_template_v3/img/simplicity-icon-user-inactive.png',
+      dark_inactive: 'app/static/static_template_v3/img/simplicity-icon-user-inactive-2.png' 
+      } 
+    }">
+                        <div class="h-[36px] min-w-[7px] rounded-[25px] {% if path == '/users' %}bg-secondary-600{% else %}bg-transparent{% endif %}"
+                            :class="{
+        'mr-[26px]': $store.preference.sidebar.isMaximize(),
+        'mr-[10px]': $store.preference.sidebar.isMinimize()
+      }"></div>
+                        <div class="relative flex flex-1 flex-row items-center">
+                            <img class="min-w-[20px] max-w-[20px]"
+                                :class="{ 'mr-[12px]': $store.preference.sidebar.isMaximize() }" width="20" height="20"
+                                :src="$store.preference.theme.isDark ? (isVisible ? icon.dark_active : icon.dark_inactive) : (isVisible ? icon.active : icon.inactive)"
+                                alt="Dashboard icon inactive" />
+                            <p class="absolute ml-[58px] hidden rounded-[8px] bg-secondary-600 px-[12px] py-[8px] text-[14px] leading-[20px] text-white before:absolute before:-ml-[14px] before:mt-[4px] before:block before:h-[12px] before:w-[12px] before:rotate-45 before:bg-secondary-600 before:content-[''] dark:before:bg-secondary-600"
+                                :class="{ 'group-hover:block': $store.preference.sidebar.isMinimize() }">
+                                Users
+                            </p>
+
+                            <p class="font-medium leading-[24px] {% if path == '/users' %}text-white{% else %}text-neutral-800{% endif %} dark:text-[#99A3B6]"
+                                :class="{
+          'first:first-letter:text-secondary-600 first:first-letter:dark:text-secondary-600 first:first-letter:text-base dark:first:first-letter:text-neutral-400 text-transparent text-[0px]': $store.preference.sidebar.isMinimize()
+        }">
+                                Users
+                            </p>
+
+                            <!-- Toggle Icon -->
+
+                            <!-- End of Toggle Icon -->
+                        </div>
+                    </div>
+                </a>
+
+                <a class="block" href="/modules" x-data="collapsible" data-chip-label="Modules">
+                    <div class="group mx-[12px] flex flex-row whitespace-nowrap rounded-[12px] {% if path == '/modules' %}bg-primary-800{% else %}bg-transparent{% endif %} py-[10px]"
+                        :class="{ '': $store.preference.sidebar.isMaximize() }" x-data="{ 
+      icon: { active: '', 
+      inactive: 'app/static/static_template_v3/img/simplicity-icon-module-inactive.png',
+      dark_active: 'app/static/static_template_v3/img/simplicity-icon-module-inactive-2.png',
+      dark_inactive: 'app/static/static_template_v3/img/simplicity-icon-module-inactive-2.png' 
+      } 
+    }">
+                        <div class="h-[36px] min-w-[7px] rounded-[25px] {% if path == '/modules' %}bg-secondary-600{% else %}bg-transparent{% endif %}"
+                            :class="{
+        'mr-[26px]': $store.preference.sidebar.isMaximize(),
+        'mr-[10px]': $store.preference.sidebar.isMinimize()
+      }"></div>
+                        <div class="relative flex flex-1 flex-row items-center">
+                            <img class="min-w-[20px] max-w-[20px]"
+                                :class="{ 'mr-[12px]': $store.preference.sidebar.isMaximize() }" width="20" height="20"
+                                :src="$store.preference.theme.isDark ? (isVisible ? icon.dark_active : icon.dark_inactive) : (isVisible ? icon.active : icon.inactive)"
+                                alt="Dashboard icon inactive" />
+                            <p class="absolute ml-[58px] hidden rounded-[8px] bg-secondary-600 px-[12px] py-[8px] text-[14px] leading-[20px] text-white before:absolute before:-ml-[14px] before:mt-[4px] before:block before:h-[12px] before:w-[12px] before:rotate-45 before:bg-secondary-600 before:content-[''] dark:before:bg-secondary-600"
+                                :class="{ 'group-hover:block': $store.preference.sidebar.isMinimize() }">
+                                Modules
+                            </p>
+
+                            <p class="font-medium leading-[24px] {% if path == '/modules' %}text-white{% else %}text-neutral-800{% endif %} dark:text-[#99A3B6]"
+                                :class="{
+          'first:first-letter:text-secondary-600 first:first-letter:dark:text-secondary-600 first:first-letter:text-base dark:first:first-letter:text-neutral-400 text-transparent text-[0px]': $store.preference.sidebar.isMinimize()
+        }">
+                                Modules
+                            </p>
+
+                            <!-- Toggle Icon -->
+
+                            <!-- End of Toggle Icon -->
+                        </div>
+                    </div>
+                </a>
+
+                <a class="block" href="/settings" x-data="collapsible" data-chip-label="Settings">
+                    <div class="group mx-[12px] flex flex-row whitespace-nowrap rounded-[12px] {% if path == '/settings' %}bg-primary-800{% else %}bg-transparent{% endif %} py-[10px]"
+                        :class="{ '': $store.preference.sidebar.isMaximize() }" x-data="{ 
+      icon: { active: '', 
+      inactive: 'app/static/static_template_v3/img/simplicity-icon-setting-inactive.png',
+      dark_active: 'app/static/static_template_v3/img/simplicity-icon-setting-inactive-2.png',
+      dark_inactive: 'app/static/static_template_v3/img/simplicity-icon-setting-inactive-2.png' 
+      } 
+    }">
+                        <div class="h-[36px] min-w-[7px] rounded-[25px] {% if path == '/settings' %}bg-secondary-600{% else %}bg-transparent{% endif %}"
+                            :class="{
+        'mr-[26px]': $store.preference.sidebar.isMaximize(),
+        'mr-[10px]': $store.preference.sidebar.isMinimize()
+      }"></div>
+                        <div class="relative flex flex-1 flex-row items-center">
+                            <img class="min-w-[20px] max-w-[20px]"
+                                :class="{ 'mr-[12px]': $store.preference.sidebar.isMaximize() }" width="20" height="20"
+                                :src="$store.preference.theme.isDark ? (isVisible ? icon.dark_active : icon.dark_inactive) : (isVisible ? icon.active : icon.inactive)"
+                                alt="Dashboard icon inactive" />
+                            <p class="absolute ml-[58px] hidden rounded-[8px] bg-secondary-600 px-[12px] py-[8px] text-[14px] leading-[20px] text-white before:absolute before:-ml-[14px] before:mt-[4px] before:block before:h-[12px] before:w-[12px] before:rotate-45 before:bg-secondary-600 before:content-[''] dark:before:bg-secondary-600"
+                                :class="{ 'group-hover:block': $store.preference.sidebar.isMinimize() }">
+                                Settings
+                            </p>
+
+                            <p class="font-medium leading-[24px] {% if path == '/settings' %}text-white{% else %}text-neutral-800{% endif %} dark:text-[#99A3B6]"
+                                :class="{
+          'first:first-letter:text-secondary-600 first:first-letter:dark:text-secondary-600 first:first-letter:text-base dark:first:first-letter:text-neutral-400 text-transparent text-[0px]': $store.preference.sidebar.isMinimize()
+        }">
+                                Settings
+                            </p>
+
+                            <!-- Toggle Icon -->
+
+                            <!-- End of Toggle Icon -->
+                        </div>
+                    </div>
+                </a>
+
+                <a class="block" href="/check-log" x-data="collapsible" data-chip-label="Check Log">
+                    <div class="group mx-[12px] flex flex-row whitespace-nowrap rounded-[12px] {% if path == '/check-log' %}bg-primary-800{% else %}bg-transparent{% endif %} py-[10px]"
+                        :class="{ '': $store.preference.sidebar.isMaximize() }" x-data="{ 
+      icon: { active: '', 
+      inactive: 'app/static/static_template_v3/img/simplicity-icon-check-log.png',
+      dark_active: 'app/static/static_template_v3/img/simplicity-icon-check-log-2.png',
+      dark_inactive: 'app/static/static_template_v3/img/simplicity-icon-check-log-2.png' 
+      } 
+    }">
+                        <div class="h-[36px] min-w-[7px] rounded-[25px] {% if path == '/check-log' %}bg-secondary-600{% else %}bg-transparent{% endif %}"
+                            :class="{
+        'mr-[26px]': $store.preference.sidebar.isMaximize(),
+        'mr-[10px]': $store.preference.sidebar.isMinimize()
+      }"></div>
+                        <div class="relative flex flex-1 flex-row items-center">
+                            <img class="min-w-[20px] max-w-[20px]"
+                                :class="{ 'mr-[12px]': $store.preference.sidebar.isMaximize() }" width="20" height="20"
+                                :src="$store.preference.theme.isDark ? (isVisible ? icon.dark_active : icon.dark_inactive) : (isVisible ? icon.active : icon.inactive)"
+                                alt="Dashboard icon inactive" />
+                            <p class="absolute ml-[58px] hidden rounded-[8px] bg-secondary-600 px-[12px] py-[8px] text-[14px] leading-[20px] text-white before:absolute before:-ml-[14px] before:mt-[4px] before:block before:h-[12px] before:w-[12px] before:rotate-45 before:bg-secondary-600 before:content-[''] dark:before:bg-secondary-600"
+                                :class="{ 'group-hover:block': $store.preference.sidebar.isMinimize() }">
+                                Check Log
+                            </p>
+
+                            <p class="font-medium leading-[24px] {% if path == '/check-log' %}text-white{% else %}text-neutral-800{% endif %} dark:text-[#99A3B6]"
+                                :class="{
+          'first:first-letter:text-secondary-600 first:first-letter:dark:text-secondary-600 first:first-letter:text-base dark:first:first-letter:text-neutral-400 text-transparent text-[0px]': $store.preference.sidebar.isMinimize()
+        }">
+                                Check Log
+                            </p>
+
+                            <!-- Toggle Icon -->
+
+                            <!-- End of Toggle Icon -->
+                        </div>
+                    </div>
+                </a>
+                {% endif %}
+                {% endif %}
+
+                <!-- menu per module -->
+                {% if addon_nav["nav"] %}
+                {% for nav in addon_nav["nav"] %}
+
+                {% if nav["type"] == "single" %}
+                {% if session["leveling"] in nav["leveling"] %}
+                <a class="block" href="/{{ addon_nav['path'] }}/{{ nav['path'] }}" x-data="collapsible"
+                    >
+                    <div class="group mx-[12px] flex flex-row whitespace-nowrap rounded-[12px] {% if nav['path'] == path %}bg-primary-800{% else %}bg-transparent{% endif %} py-[10px]"
+                        :class="{ '': $store.preference.sidebar.isMaximize() }" x-data="{ 
+      icon: { active: '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-user-inactive.png') }}', 
+      inactive: '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-user-inactive.png') }}',
+      dark_active: '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-user-inactive.png') }}',
+      dark_inactive: '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-user-inactive-2.png') }}' 
+      } 
+    }">
+                        <div class="h-[36px] min-w-[7px] rounded-[25px] {% if nav['path'] == path %}bg-secondary-600{% else %}bg-transparent{% endif %}"
+                            :class="{
+        'mr-[26px]': $store.preference.sidebar.isMaximize(),
+        'mr-[10px]': $store.preference.sidebar.isMinimize()
+      }"></div>
+                        <div class="relative flex flex-1 flex-row items-center">
+                            <img class="min-w-[20px] max-w-[20px]"
+                                :class="{ 'mr-[12px]': $store.preference.sidebar.isMaximize() }" width="20" height="20"
+                                :src="$store.preference.theme.isDark ? (isVisible ? icon.dark_active : icon.dark_inactive) : (isVisible ? icon.active : icon.inactive)"
+                                alt="Dashboard icon inactive" />
+                            <p class="absolute ml-[58px] hidden rounded-[8px] bg-secondary-600 px-[12px] py-[8px] text-[14px] leading-[20px] text-white before:absolute before:-ml-[14px] before:mt-[4px] before:block before:h-[12px] before:w-[12px] before:rotate-45 before:bg-secondary-600 before:content-[''] dark:before:bg-secondary-600"
+                                :class="{ 'group-hover:block': $store.preference.sidebar.isMinimize() }">
+                                {{ nav["name"] }}
+                            </p>
+
+                            <p class="font-medium leading-[24px] {% if nav['path'] == path %}text-white{% else %}text-neutral-800{% endif %} dark:text-[#99A3B6]"
+                                :class="{
+          'first:first-letter:text-secondary-600 first:first-letter:dark:text-secondary-600 first:first-letter:text-base dark:first:first-letter:text-neutral-400 text-transparent text-[0px]': $store.preference.sidebar.isMinimize()
+        }">
+                                {{ nav["name"] }}
+                            </p>
+
+                            <!-- Toggle Icon -->
+
+                            <!-- End of Toggle Icon -->
+                        </div>
+                    </div>
+                </a>
+                {% endif %}
+
+                {% elif nav["type"] == "dropdown" %}
+                {% if session["leveling"] in nav["leveling"] %}
+
+                <div class="flex flex-col gap-[8px]"
+                    :class="isVisible ? 'bg-transparent dark:bg-transparent' : 'bg-transparent'" x-data="collapsible">
+                    <button @click="toggle">
+                        <div class="group mx-[12px] flex flex-row whitespace-nowrap rounded-[12px] {% if path %}bg-primary-800{% else %}bg-transparent{% endif %} py-[10px]"
+                            :class="{ '': $store.preference.sidebar.isMaximize() }" x-data="{ 
+      icon: { active: '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-app-inactive.png') }}', 
+      inactive: '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-app-inactive-2.png') }}',
+      dark_active: '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-app-active-2.png') }}',
+      dark_inactive: '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-app-inactive-2.png') }}' 
+      } 
+    }">
+                            <div class="h-[36px] min-w-[7px] rounded-[25px] {% if path %}bg-secondary-600{% else %}bg-transparent{% endif %}"
+                                :class="{
+        'mr-[26px]': $store.preference.sidebar.isMaximize(),
+        'mr-[10px]': $store.preference.sidebar.isMinimize()
+      }"></div>
+                            <div class="relative flex flex-1 flex-row items-center">
+                                <img class="min-w-[20px] max-w-[20px]"
+                                    :class="{ 'mr-[12px]': $store.preference.sidebar.isMaximize() }" width="20"
+                                    height="20"
+                                    :src="$store.preference.theme.isDark ? (isVisible ? icon.dark_active : icon.dark_inactive) : (isVisible ? icon.active : icon.inactive)"
+                                    alt="Dashboard icon inactive" />
+                                <p class="absolute ml-[58px] hidden rounded-[8px] bg-secondary-600 px-[12px] py-[8px] text-[14px] leading-[20px] text-white before:absolute before:-ml-[14px] before:mt-[4px] before:block before:h-[12px] before:w-[12px] before:rotate-45 before:bg-secondary-600 before:content-[''] dark:before:bg-secondary-600"
+                                    :class="{ 'group-hover:block': $store.preference.sidebar.isMinimize() }">
+                                    {{ nav["name"] }}
+                                </p>
+
+                                <p class="font-medium leading-[24px] {% if path %}text-white{% else %}text-neutral-800{% endif %} dark:text-[#99A3B6]"
+                                    :class="{
+          'first:first-letter:text-secondary-600 first:first-letter:dark:text-secondary-600 first:first-letter:text-base dark:first:first-letter:text-neutral-400 text-transparent text-[0px]': $store.preference.sidebar.isMinimize()
+        }">
+                                    {{ nav["name"] }}
+                                </p>
+
+                                <!-- Toggle Icon -->
+
+                                <img class="ml-auto mr-[20px] max-h-[20px] max-w-[20px]"
+                                    :class="{% if path %}!isCollapsed{% else %}isCollapsed{% endif %} ? 'rotate-0' : 'rotate-90'"
+                                    src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-caret-inactive-2.png') }}"
+                                    alt="Caret" />
+
+                                <!-- End of Toggle Icon -->
+                            </div>
+                        </div>
+                    </button>
+                    <div class="mx-[12px] rounded-[12px] dark:bg-neutral-900">
+                        <div class="space-y-[8px]" x-cloak x-collapse
+                            x-show="{% if path %}!isVisible{% else %}isVisible{% endif %}">
+                            <!-- sub -->
+
+                            <!-- sub menu -->
+                            {% for chil in nav["child"] %}
+                            {% if session["leveling"] in chil["leveling"] %}
+                            <!-- <h1>{{chil["name"]}}</h1> -->
+                            <button onclick="location.href=`/{{ addon_nav['path'] }}/{{ chil['path'] }}`" 
+                                class="block space-y-[8px] w-full" {% if request.path.split("/")[2]==chil["path"]
+                                %}style="background: #ededed;" {% endif %}
+                                x-data="{ open: {% if path == '/ad-account-queue' %}true{% else %}false{% endif %} }"
+                                @click="open = !open">
+                                <div class="group mx-[12px] flex flex-row whitespace-nowrap rounded-[12px] bg-transparent py-[10px]"
+                                    :class="{ '': $store.preference.sidebar.isMaximize() }" x-data="{ 
+      icon: { active: '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-bolt.png') }}', 
+      inactive: '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-bolt.png') }}',
+      dark_active: '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-bolt-2.png') }}',
+      dark_inactive: '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-bolt-2.png') }}' 
+      } 
+    }">
+                                    <div class="h-[36px] min-w-[7px] rounded-[25px] bg-transparent" :class="{
+        'mr-[26px]': $store.preference.sidebar.isMaximize(),
+        'mr-[0px]': $store.preference.sidebar.isMinimize()
+      }"></div>
+                                    <div class="relative flex flex-1 flex-row items-center">
+                                        <img class="min-w-[20px] max-w-[20px]"
+                                            :class="{ 'mr-[12px]': $store.preference.sidebar.isMaximize() }" width="20"
+                                            height="20"
+                                            :src="$store.preference.theme.isDark ? (isVisible ? icon.dark_active : icon.dark_inactive) : (isVisible ? icon.active : icon.inactive)"
+                                            alt="Dashboard icon inactive" />
+                                        <p class="absolute ml-[58px] hidden rounded-[8px] bg-secondary-600 px-[12px] py-[8px] text-[14px] leading-[20px] text-white before:absolute before:-ml-[14px] before:mt-[4px] before:block before:h-[12px] before:w-[12px] before:rotate-45 before:bg-secondary-600 before:content-[''] dark:before:bg-secondary-600"
+                                            :class="{ 'group-hover:block': $store.preference.sidebar.isMinimize() }">
+                                            {{chil["name"]}}
+                                        </p>
+
+                                        <p class="font-medium leading-[24px] text-neutral-800 dark:text-[#99A3B6]"
+                                            :class="{
+          'first:first-letter:text-secondary-600 first:first-letter:dark:text-secondary-600 first:first-letter:text-base dark:first:first-letter:text-neutral-400 text-transparent text-[0px]': $store.preference.sidebar.isMinimize()
+        }">
+                                            {{chil["name"]}}
+                                        </p>
+
+                                        <!-- Toggle Icon -->
+
+                                        <!-- End of Toggle Icon -->
+                                    </div>
+                                </div>
+
+
+                            </button>
+                            {% endif %}
+                            {% endfor %}
+                            <!-- end sub menu -->
+                            <!-- end sub -->
+                        </div>
+                    </div>
+                </div>
+
+                {% endif %}
+                {% endif %}
+
+                {% endfor %}
+                {% endif %}
+                <!-- end menu per module -->
+
+            </div>
+            <!-- End of Sidebar Menu Block -->
+        </aside>
+    </div>
+
+    <!-- end: Sidebar -->
+
+    <!-- start: Main -->
+    <main class="min-w-0 flex-grow transition-all">
+        <!-- Navbar -->
+        <header
+            class="flex flex-row items-center gap-[20px] bg-white py-[16px] shadow-lg shadow-primary-500/5 dark:bg-neutral-800">
+            <!-- Brand -->
+            <a class="ml-[36px] lg:hidden" href="/">
+                <img class="h-[28px] w-auto" :class="$store.preference.sidebar.isMinimize() ? 'mx-auto' : null"
+                    width="auto" height="28"
+                    src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-single.png') }}"
+                    alt="Bhumi Simplicity Brand Logo" x-cloak />
+            </a>
+            <!-- End of Brand -->
+
+            <!-- Application Searchbar -->
+            <div class="ml-[12px] flex flex-grow flex-row items-center">
+                <button class="mr-[6px]" @click="$store.preference.sidebar.toggle()">
+                    <img width="20" height="20"
+                        src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-hamburger.png') }}"
+                        alt="Click here to toggle sidebar menu" />
+                </button>
+                <p class="ml-10 text-[14px] font-medium text-neutral-800 dark:text-white">
+                    Last visit apps
+                </p>
+                <div class="mx-5 h-[30px] border-l-2 border-primary-200 dark:border-secondary-200"></div>
+                <div class="mr-[8px] flex-grow">
+                    <div id="chip-container" class="flex w-full flex-row items-center justify-start gap-[12px]">
+                        <template x-for="chip in chips" :key="chip">
+                            <div
+                                class="flex flex-row items-center gap-2 rounded-full border border-primary-200 bg-primary-200 px-4 py-2 shadow-sm">
+                                <a href="javascript:void(0);" class="text-[14px] font-medium text-neutral-900"
+                                    x-text="chip" @click.prevent="handleChipClick(chip)">
+                                </a>
+                                <button class="flex h-4 w-4 items-center justify-center rounded-full text-white"
+                                    @click="removeChip(chip)">
+                                    <img src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-close-3.png') }}"
+                                        alt="Remove Chip" class="w-[10px]" />
+                                </button>
+                            </div>
+                        </template>
+                        <!-- <div
+                            class="flex flex-row items-center gap-2 rounded-full border border-primary-200 bg-primary-200 px-4 py-2 shadow-sm">
+                            <a href="javascript:void(0);" class="text-[14px] font-medium text-neutral-900">Hello
+                            </a>
+                            <button class="flex h-4 w-4 items-center justify-center rounded-full text-white">
+                                <img src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-close-3.png') }}"
+                                    alt="Remove Chip" class="w-[10px]" />
+                            </button>
+                        </div>
+                        <div
+                            class="flex flex-row items-center gap-2 rounded-full border border-primary-200 bg-primary-200 px-4 py-2 shadow-sm">
+                            <a href="javascript:void(0);" class="text-[14px] font-medium text-neutral-900">Hello
+                            </a>
+                            <button class="flex h-4 w-4 items-center justify-center rounded-full text-white">
+                                <img src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-close-3.png') }}"
+                                    alt="Remove Chip" class="w-[10px]" />
+                            </button>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            <!-- End of Application Searchbar -->
+
+            <!-- Quick Access -->
+            <div class="flex flex-row items-start gap-[20px]">
+                <button class="relative inline-block" x-data="{ isOpen: false }" @click="isOpen = !isOpen"
+                    @click.outside="isOpen = false">
+                    <span
+                        class="absolute right-0 top-0 -mr-[6px] -mt-[6px] flex h-[16px] w-[16px] items-center justify-center rounded-full bg-danger-500 text-[10px] font-medium leading-[18px] text-white">2</span>
+                    <img width="20" height="20"
+                        :src="$store.preference.theme.isDark ? '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-notification-dark.png') }}' : '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-notification.png') }}'"
+                        alt="Notification" />
+                    <div class="absolute right-0 z-10 min-w-[240px] overflow-hidden rounded-[8px] border border-neutral-400 bg-white dark:border-neutral-700 dark:bg-neutral-800"
+                        x-show="isOpen" x-transition x-cloak>
+                        <div class="flex items-center gap-[12px] px-[16px] py-[10px]">
+                            <img class="max-h-[20px] max-w-[20px] rounded-[4px]" width="20" height="20"
+                                src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-fake-avatar.png') }}"
+                                alt="Notification item icon" />
+                            <div class="flex-1 text-left">
+                                <p class="text-[14px] leading-[20px] text-neutral-900 dark:text-white">
+                                    John Doe
+                                </p>
+                                <p class="text-[12px] leading-[18px] text-neutral-600 dark:text-white">
+                                    Lorem Ipsum
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-[12px] px-[16px] py-[10px]">
+                            <img class="max-h-[20px] max-w-[20px] rounded-[4px]" width="20" height="20"
+                                src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-fake-avatar.png') }}"
+                                alt="Notification item icon" />
+                            <div class="flex-1 text-left">
+                                <p class="text-[14px] leading-[20px] text-neutral-900 dark:text-white">
+                                    John Doe
+                                </p>
+                                <p class="text-[12px] leading-[18px] text-neutral-600 dark:text-white">
+                                    Lorem Ipsum
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-[12px] px-[16px] py-[10px]">
+                            <img class="max-h-[20px] max-w-[20px] rounded-[4px]" width="20" height="20"
+                                src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-fake-avatar.png') }}"
+                                alt="Notification item icon" />
+                            <div class="flex-1 text-left">
+                                <p class="text-[14px] leading-[20px] text-neutral-900 dark:text-white">
+                                    John Doe
+                                </p>
+                                <p class="text-[12px] leading-[18px] text-neutral-600 dark:text-white">
+                                    Lorem Ipsum
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-[12px] px-[16px] py-[10px]">
+                            <img class="max-h-[20px] max-w-[20px] rounded-[4px]" width="20" height="20"
+                                src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-fake-avatar.png') }}"
+                                alt="Notification item icon" />
+                            <div class="flex-1 text-left">
+                                <p class="text-[14px] leading-[20px] text-neutral-900 dark:text-white">
+                                    John Doe
+                                </p>
+                                <p class="text-[12px] leading-[18px] text-neutral-600 dark:text-white">
+                                    Lorem Ipsum
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-[12px] px-[16px] py-[10px]">
+                            <img class="max-h-[20px] max-w-[20px] rounded-[4px]" width="20" height="20"
+                                src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-fake-avatar.png') }}"
+                                alt="Notification item icon" />
+                            <div class="flex-1 text-left">
+                                <p class="text-[14px] leading-[20px] text-neutral-900 dark:text-white">
+                                    John Doe
+                                </p>
+                                <p class="text-[12px] leading-[18px] text-neutral-600 dark:text-white">
+                                    Lorem Ipsum
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+                <button class="relative inline-block" @click="$store.preference.theme.toggle()">
+                    <img width="20" height="20"
+                        :src="$store.preference.theme.isDark ? '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-theme-dark.png') }}' : '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-theme.png') }}'"
+                        alt="Them switcher" />
+                </button>
+            </div>
+            <!-- End of Quick Access -->
+
+            <!-- User Avatar -->
+
+            <div class="relative mr-[36px]" x-data="{ show: false }" @click.outside="show = false;">
+                <button @click="show ? show = false : show = true;">
+                    <img class="rounded-[12px]" width="40" height="40"
+                        src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-fake-avatar.png') }}"
+                        alt="Fake user avatar" />
+                </button>
+                <div class="absolute right-0 top-0 mt-[47px] min-w-[240px] rounded-[8px] border border-neutral-400 bg-white px-[16px] py-[10px] dark:border-neutral-700 dark:bg-neutral-900"
+                    x-cloak x-show="show" x-transition>
+                    <a class="flex w-full items-center gap-[12px]" href="/logout" id="logout">
+                        <img width="16" height="16"
+                            :src="$store.preference.theme.isDark ? '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-logout-dark.png') }}' : '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-logout-bold.png') }}'"
+                            alt="Logout" />
+                        <span class="text-[14px] font-medium leading-[20px] dark:text-white">Logout</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- End of User Avatar -->
+        </header>
+        <!-- End of Navbar -->
+
+        <!-- chip -->
+        <div class="px-[36px] py-[18px]">
+            <!-- block content -->
+            {% block content %}
+            {% endblock content %}
+            <!-- end block content -->
+        </div>
+
+        <footer class="bg-white px-[24px] py-[12px] dark:bg-neutral-800">
+            <p class="leading-[24px] text-neutral-600 dark:text-[#99A3B6]">
+                &copy; 2024 BJP-BJS. All rights reserved.
+            </p>
+        </footer>
+    </main>
+    <!-- end: Main -->
+
+    <template x-if="$store.preference.appmenu.show">
+        <div class="fixed left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-[#101828]/[.24] dark:bg-[#101828]/[.76]"
+            x-data="{ keyword: '' }">
+            <div class="w-[690px] max-w-[690px]">
+                <div
+                    class="rounded-[12px] border border-transparent bg-info-100 p-[10px] dark:border-neutral-700 dark:bg-neutral-800">
+                    <!-- Menu -->
+                    <div class="mb-[10px] flex justify-end">
+                        <button @click="$store.preference.appmenu.close()">
+                            <img class="max-h-[24px] max-w-[24px]" width="24" height="24"
+                                :src="$store.preference.theme.isDark ? '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-close-dark-2.png') }}' : '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-close-5.png') }}'"
+                                alt="Close app menu" />
+                        </button>
+                    </div>
+                    <!-- End Menu -->
+
+                    <div
+                        class="bg-iwhite rounded-[12px] border border-neutral-400 bg-white dark:border-neutral-700 dark:bg-neutral-900">
+                        <!-- Keyword Entry -->
+                        <div class="border-b border-neutral-400 dark:border-neutral-700">
+                            <div class="flex flex-row gap-[8px] px-[14px] py-[8px]">
+                                <form class="flex-grow" @submit.prevent>
+                                    <input class="w-full bg-transparent leading-[24px] outline-none dark:text-[#99A3B6]"
+                                        placeholder="Search" x-model="keyword" x-ref="appmenu_keyword_entry"
+                                        x-init="$refs.appmenu_keyword_entry.focus()"
+                                        x-on:keyup.debounce.500="$store.preference.appmenu.search(keyword)" />
+                                </form>
+                                <div class="flex flex-row items-center gap-[12px]" x-show="keyword.length > 0">
+                                    <button class="flex items-center gap-[4px]"
+                                        @click="keyword = ''; $store.preference.appmenu.search_result = []">
+                                        <span
+                                            class="text-[14px] leading-[20px] text-neutral-600 dark:text-[#99A3B6]">Clear</span>
+                                        <img class="max-h-[16px] max-w-[16px]" width="16" height="16"
+                                            :src="$store.preference.theme.isDark ? '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-close-dark.png') }}' : '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-close.png') }}'"
+                                            alt="Clear search" />
+                                    </button>
+                                    <button>
+                                        <img class="max-h-[16px] max-w-[16px]" width="16" height="16"
+                                            src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-magnifier.png') }}"
+                                            alt="Search" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End of Keyword Entry -->
+
+                        <!-- Search Result -->
+                        <div class="grid grid-cols-3 gap-[52px] px-[28px] py-[24px]">
+                            <template x-for="menu in $store.preference.appmenu.menus">
+                                <div class="flex flex-1 items-start gap-[8px]">
+                                    <div class="max-h-[20px] max-w-[20px] py-[4px]">
+                                        <img class="min-h-[20px] min-w-[20px]" width="20" height="20"
+                                            src="{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-app-active.png') }}"
+                                            alt="Menu icon" />
+                                    </div>
+                                    <a class="block min-w-0" :href="menu.url">
+                                        <p class="truncate font-medium leading-[24px] text-primary-600 dark:text-secondary-600"
+                                            x-text="menu.title"></p>
+                                        <p class="text-[12px] leading-[18px] text-neutral-800 dark:text-[#99A3B6]"
+                                            x-text="menu.description"></p>
+                                    </a>
+                                </div>
+                            </template>
+                        </div>
+                        <!-- End of Search Result -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- <script>
+        document.getElementById("logout").onclick = function(){
+            localStorage.clear();
+        }
+    </script> -->
+    
+    {% endblock body %}

@@ -1,0 +1,57 @@
+{% extends "base_template/base_merge_template_v3/base.html" %}
+<!-- block content -->
+{% block content %}
+<div class="min-h-screen" x-data="power_bi_widget" x-on:drop="dropwidget($event)" x-on:dragover.prevent
+    x-on:dragleave.prevent>
+    <!-- Breadcrumb -->
+    <div class="mb-[36px]">
+        <ul class="flex flex-row gap-[4px]">
+            <li class="text-[24px] font-bold leading-[32px] text-primary-600 dark:text-secondary-600">
+                Dashboard
+            </li>
+        </ul>
+    </div>
+
+    <!-- Show DND when theres no active widgets -->
+    <template x-if="active_widgets.length === 0">
+        <div
+            class="dark:bg-neutral-8000 rounded-[20px] border-2 border-neutral-400 bg-white p-[32px] dark:border-neutral-700 dark:bg-neutral-800">
+            <p class="mb-[14px] text-center font-medium leading-[24px] text-neutral-600 dark:text-white">
+                Add widgets from the sidebar
+            </p>
+            <div
+                class="flex flex-col items-center justify-center gap-[16px] rounded-[8px] border border-dashed border-primary-400 bg-neutral-200 py-[35px] dark:border-neutral-600 dark:bg-neutral-900">
+                <img class="max-h-[60px] max-w-[60px]" width="60" height="60"
+                    :src="$store.preference.theme.isDark ? 'app/static/static_template_v3/img/simplicity-icon-widget-add-dark-2.png' : 'app/static/static_template_v3/img/simplicity-icon-widget-add-2.png'"
+                    alt="Add widget" />
+                <p class="text-[14px] leading-[20px] text-[#070D18] dark:text-white">
+                    Drag and drop widget here
+                </p>
+            </div>
+        </div>
+    </template>
+
+    <template x-if="active_widgets.length > 0">
+        <div class="grid grid-cols-2 gap-[16px]">
+            <template x-for="widget in active_widgets">
+                <div
+                    class="overflow-hidden rounded-[20px] border-2 border-neutral-400 bg-white dark:border-neutral-700 dark:bg-neutral-800">
+                    <div
+                        class="flex flex-row items-center justify-between border-b border-neutral-400 px-[24px] py-[20px] dark:border-neutral-700">
+                        <p class="text-[18px] font-medium text-primary-700 dark:text-white" x-text="widget.label"></p>
+                        <button @click="removewidget(widget.name)">
+                            <img class="max-h-[24px] max-w-[24px]" width="24" height="24"
+                                :src="$store.preference.theme.isDark ? 'app/static/static_template_v3/img/simplicity-icon-close-dark-2.png' : 'app/static/static_template_v3/img/simplicity-icon-close-5.png'"
+                                alt="Remove widget" />
+                        </button>
+                    </div>
+                    <iframe class="h-[307px] w-full" title="11062024_1" :src="widget.url" frameborder="0"
+                        allowfullscreen="true">
+                    </iframe>
+                </div>
+            </template>
+        </div>
+    </template>
+</div>
+{% endblock content %}
+<!-- end block content -->

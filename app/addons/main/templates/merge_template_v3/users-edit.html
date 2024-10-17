@@ -1,0 +1,194 @@
+{% extends "base_template/base_merge_template_v3/base.html" %}
+{% block content %}
+<ul class="flex flex-row gap-[4px]">
+    <li class="text-[24px] font-normal leading-[32px] text-neutral-600 dark:text-[#99A3B6]">
+        Users
+    </li>
+
+    <li class="mx-[7px] text-[18px] font-semibold leading-[28px] text-secondary-600 dark:text-[#99A3B6]">
+        /
+    </li>
+
+    <li class="text-[24px] font-bold leading-[32px] text-primary-600 dark:text-secondary-600">
+        Edit
+    </li>
+</ul>
+
+<div class="mt-[26px] min-h-screen">
+    <div
+        class="rounded-[20px] border border-neutral-400 bg-white disabled:cursor-not-allowed dark:border-neutral-700 dark:bg-neutral-800">
+        <h1
+            class="border-b border-neutral-400 px-[24px] py-[20px] text-[18px] font-medium leading-[28px] text-neutral-900 dark:border-neutral-700 dark:text-white">
+            Change permission user
+        </h1>
+
+        <form class="space-y-[24px] p-[28px]" action="{{ url_for('main.user_update') }}" method="post">
+            <div>
+                <label class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white" for="name">
+                    Name
+                </label>
+
+                <div
+                    class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-neutral-200 px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900">
+                    <div></div>
+                    <input
+                        class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white"
+                        id="name" type="text" placeholder="" value="{{ user.name }}" readonly />
+                </div>
+            </div>
+
+            <div>
+                <label class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white" for="email">
+                    Email
+                </label>
+
+                <div
+                    class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-neutral-200 px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900">
+                    <div></div>
+                    <input
+                        class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white"
+                        id="email" type="email" placeholder="" value="{{ user.email }}" readonly />
+                </div>
+            </div>
+
+            <div>
+                <label class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white" for="department">
+                    Department
+                </label>
+
+                <div
+                    class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-neutral-200 px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900">
+                    <div></div>
+                    <input
+                        class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white"
+                        id="department" type="text" placeholder="" value="{{ user.department }}" readonly />
+                </div>
+            </div>
+
+            <div>
+                <label class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white" for="position">
+                    Position
+                </label>
+
+                <div
+                    class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-neutral-200 px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900">
+                    <div></div>
+                    <input
+                        class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white"
+                        id="position" type="text" placeholder="" value="{{ user.position }}" readonly />
+                </div>
+            </div>
+
+            <div>
+                <label class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white" for="username">
+                    Username
+                </label>
+
+                <div
+                    class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-neutral-200 px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900">
+                    <div></div>
+                    <input
+                        class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white"
+                        id="username" name="username" type="text" placeholder="" value="{{ user.username }}" readonly />
+                </div>
+            </div>
+
+            <div>
+                <label class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white" for="password">
+                    Password
+                </label>
+
+                <div
+                    class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-neutral-200 px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900">
+                    <div></div>
+                    <input
+                        class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white"
+                        id="password" name="password" type="text" {% if user.type=="DB" %}required{% elif
+                        user.type=="AD" %}readonly{% endif %} />
+                </div>
+            </div>
+
+            <div>
+                <label class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white" for="appsid">
+                    AppsID
+                </label>
+
+                <div
+                    class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-white px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900">
+                    <div></div>
+                    <input
+                        class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white"
+                        id="appsid" name="appsid" type="text" placeholder="" value="{{ user.apps_id }}" />
+                </div>
+            </div>
+
+            <div>
+                <label class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white" for="level">
+                    Level
+                </label>
+
+                <div
+                    class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-neutral-200 px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900">
+                    <div></div>
+                    <input
+                        class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white"
+                        id="level" type="text" placeholder="" value="{{ user.level }}" readonly />
+                </div>
+            </div>
+
+            <!-- <div>
+                    <label class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white" for="leveling">
+                        Leveling Addon
+                    </label>
+
+                    <div
+                        class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-white px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900">
+                        <div></div>
+                        <input
+                            class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white"
+                            id="leveling" name="leveling" type="text" placeholder="" value="Member" />
+                    </div>
+                </div> -->
+
+            <div>
+                <label class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white" for="addonlevel">
+                    Leveling Addon
+                </label>
+                <div
+                    class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-white px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900">
+                    <select name="addonlevel" id="addonlevel"
+                        class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white">
+                        <option value="parent" {% if user.leveling=="parent" %}selected{% endif %}>Parent</option>
+                        <option value="member" {% if user.leveling=="member" %}selected{% endif %}>Member</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white" for="type">
+                    Type
+                </label>
+
+                <div
+                    class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-neutral-200 px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900">
+                    <div></div>
+                    <input
+                        class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white"
+                        id="type" type="text" placeholder="" value="{{ user.type }}" readonly />
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-[24px]">
+                <button
+                    class="block w-full rounded-[8px] border border-neutral-400 bg-transparent py-[10px] text-center font-medium leading-[24px] text-[#4D5973] dark:border-neutral-700 dark:text-neutral-300">
+                    Cancel
+                </button>
+                <button type="submit"
+                    class="block w-full rounded-[8px] border border-primary-600 bg-primary-600 py-[10px] text-center font-medium leading-[24px] text-white dark:border-secondary-600 dark:bg-secondary-600 dark:text-neutral-900">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

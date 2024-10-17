@@ -1,0 +1,96 @@
+{% extends "base_template/base.html" %}
+{% block containerfluid %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Queue list of new applications</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body table-responsive p-0">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th style="width: 10px">#</th>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Version</th>
+                            <th style="width: 40px">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size: 14px;">
+                        {% for addon in addon_tables %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ addon["id"] }}</td>
+                            <td>{{ addon["name"] }}</td>
+                            <td>{{ addon["version"] }}</td>
+                            <!-- <td><button type="button" class="btn btn-block btn-primary btn-sm">Export</button></td> -->
+                            <td>
+                                {% if addon["export_status"] %}
+                                <a href="{{ url_for('main.export_app', id=addon['id']) }}"
+                                    class="btn btn-block btn-success btn-xs">Update</a>
+                                {% else %}
+                                <a href="{{ url_for('main.export_app', id=addon['id']) }}"
+                                    class="btn btn-block btn-primary btn-xs">Export</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">List of Applications</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body table-responsive p-0">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th style="width: 10px">#</th>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Version</th>
+                            <th style="width: 100px">Status</th>
+                            <th style="width: 40px">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size: 14px;">
+                        {% for nv in nav_query %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ nv.id }}</td>
+                            <td>{{ nv.name }}</td>
+                            <td>{{ nv.version }}</td>
+                            <td>
+                                {% if nv.status %}
+                                <a href="{{ url_for('main.update_status', id=nv.id, status=0) }}"
+                                    class="btn btn-block btn-success btn-xs">Active</a>
+                                {% else %}
+                                <a href="{{ url_for('main.update_status', id=nv.id, status=1) }}"
+                                    class="btn btn-block btn-warning btn-xs">inActive</a>
+                                {% endif %}
+                            </td>
+                            <!-- <td><button type="button" class="btn btn-block btn-primary btn-sm">Export</button></td> -->
+                            <td>
+                                <a href="void:javascript(0);" class="btn btn-block btn-danger btn-xs">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+</div>
+{% endblock containerfluid %}

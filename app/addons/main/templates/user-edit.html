@@ -1,0 +1,60 @@
+{% extends "base_template/base.html" %}
+{% block containerfluid %}
+<div class="row">
+    <div class="col-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Change permission user</h3>
+            </div>
+            <form action="/user-update" method="post">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" name="name" id="name" value="{{ user.name }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" name="email" id="email" value="{{ user.email }}"
+                            readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="department">Department</label>
+                        <input type="text" class="form-control" name="department" id="department"
+                            value="{{ user.department }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="position">Position</label>
+                        <input type="text" class="form-control" name="position" id="position"
+                            value="{{ user.position }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" name="username" id="username"
+                            value="{{ user.username }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" name="password" id="password" {% if user.type=="DB"%}{% elif user.type=="AD" %}readonly{% endif %}>
+                    </div>
+                    <div class="form-group">
+                        <label for="appsid">Apps ID</label>
+                        <input type="text" class="form-control" name="appsid" id="appsid" value="{{ user.apps_id }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="level">Level</label>
+                        <input type="text" class="form-control" name="level" id="level" value="{{ user.level }}"
+                            readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Type</label>
+                        <input type="text" class="form-control" name="type" id="type" value="{{ user.type }}" readonly>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

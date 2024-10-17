@@ -1,0 +1,51 @@
+{% extends "base_template/v2/index.html" %}
+{% block title %}Login{% endblock title %}
+{% block cssothers %}
+<style>
+    .login-page {
+        /* background: #f9f9f9; */
+        background-image: url("{{ url_for('static', filename='addons/main/static/img/bg-login.jpg')}} ");
+    }
+</style>
+{% endblock cssothers %}
+{% block body %}
+
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="#"><b>BSS</b></a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="login-box-body" style="border-radius: 0.3em; box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);">
+            <p class="login-box-msg">Sign in to start your session</p>
+
+            <form action="{{ url_for('main.auth') }}" method="post">
+                <div class="form-group has-feedback">
+                    <input type="text" class="form-control" name="username" placeholder="Username" required>
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <input type="password" class="form-control" name="password" placeholder="Password" required>
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                <div class="form-group">
+                    <select class="custom-select form-control rounded-left" name="domain"
+                        aria-label="Default select example">
+                        <option value="pt-bjp" selected>PT-BJP</option>
+                        <option value="pt-bjs">PT-BJS</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <!-- /.col -->
+                    <div class="col-xs-12" style="margin: 25px 0 20px 0;">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+        </div>
+        <!-- /.login-box-body -->
+    </div>
+    <!-- /.login-box -->
+
+{% endblock body %}

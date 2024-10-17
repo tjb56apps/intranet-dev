@@ -1,0 +1,263 @@
+{% extends "base_template/base_merge_template_v3/base.html" %}
+{% block content %}
+
+<ul class="flex flex-row gap-[4px]">
+  <li class="text-[24px] font-normal leading-[32px] text-neutral-600 dark:text-[#99A3B6]">
+    Application
+  </li>
+
+  <li class="mx-[7px] text-[18px] font-semibold leading-[28px] text-secondary-600 dark:text-[#99A3B6]">
+    /
+  </li>
+
+  <li class="text-[24px] font-normal leading-[32px] text-neutral-600 dark:text-[#99A3B6]">
+    Power AD Connection
+  </li>
+
+  <li class="mx-[7px] text-[18px] font-semibold leading-[28px] text-secondary-600 dark:text-[#99A3B6]">
+    /
+  </li>
+
+  <li class="text-[24px] font-normal leading-[32px] text-neutral-600 dark:text-[#99A3B6]">
+    AD Account Queue
+  </li>
+
+  <li class="mx-[7px] text-[18px] font-semibold leading-[28px] text-secondary-600 dark:text-[#99A3B6]">
+    /
+  </li>
+
+  <li class="text-[24px] font-bold leading-[32px] text-primary-600 dark:text-secondary-600">
+    Export User
+  </li>
+</ul>
+
+<div class="mt-[26px] min-h-screen">
+  <div
+    class="rounded-[20px] border border-neutral-400 bg-white disabled:cursor-not-allowed dark:border-neutral-700 dark:bg-neutral-800">
+    <h1
+      class="border-b border-neutral-400 px-[24px] py-[20px] text-[18px] font-medium leading-[28px] text-neutral-900 dark:border-neutral-700 dark:text-white">
+      Export and Change permission user
+    </h1>
+
+    <form class="space-y-[24px] p-[28px]" role="form" action="{{ url_for('powerad.export_user_add') }}" method="post">
+      <div>
+        <label class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white" for="name">
+          Name
+        </label>
+
+        <div
+          class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-neutral-200 px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900">
+          <div></div>
+          <input
+            class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white"
+            id="name" name="name" type="text" placeholder="" value="{{ ad_user[0].lastname }}" readonly />
+        </div>
+      </div>
+
+      <div>
+        <label class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white" for="username">
+          Username
+        </label>
+
+        <div
+          class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-neutral-200 px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900">
+          <div></div>
+          <input
+            class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white"
+            id="username" name="username" type="text" placeholder="" value="{{ ad_user[0].username }}" readonly />
+        </div>
+      </div>
+
+      <div>
+        <label class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white" for="department">
+          Department
+        </label>
+
+        <div
+          class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-neutral-200 px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900">
+          <div></div>
+          <input
+            class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white"
+            id="department" name="department" type="text" placeholder="" value="{{ ad_user[0].department }}" readonly />
+        </div>
+      </div>
+
+      <div>
+        <label class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white" for="position">
+          Position
+        </label>
+
+        <div
+          class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-neutral-200 px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900">
+          <div></div>
+          <input
+            class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white"
+            id="position" name="position" type="text" placeholder="" value="{{ ad_user[0].position }}" readonly />
+        </div>
+      </div>
+
+      <div>
+        <label class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white" for="email">
+          Email
+        </label>
+
+        <div
+          class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-neutral-200 px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900">
+          <div></div>
+          <input
+            class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white"
+            id="email" name="email" type="email" placeholder="" value="{{ ad_user[0].email_domain }}" readonly />
+        </div>
+      </div>
+
+      <!-- <div>
+            <label
+              class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white"
+              for="password"
+            >
+              Password
+            </label>
+
+            <div
+              class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-neutral-200 px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900"
+            >
+              <div></div>
+              <input
+                class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white"
+                id="password"
+                name="password"
+                type="text"
+                placeholder=""
+                value=""
+                disabled
+              />
+            </div>
+          </div> -->
+
+      <div>
+        <label class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white" for="appsid">
+          AppsID
+        </label>
+
+        <div
+          class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-white px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900">
+          <div></div>
+          <input
+            class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white"
+            id="appsid" name="appsid" type="text" placeholder="" value="" />
+        </div>
+      </div>
+
+      <!-- <div>
+            <label
+              class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white"
+              for="level"
+            >
+              Level
+            </label>
+
+            <div
+              class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-neutral-200 px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900"
+            >
+              <div></div>
+              <input
+                class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white"
+                id="level"
+                name="level"
+                type="text"
+                placeholder=""
+                value="Administrator"
+                disabled
+              />
+            </div>
+          </div> -->
+
+      <!-- <div>
+            <label
+              class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white"
+              for="leveling"
+            >
+              Leveling Addon
+            </label>
+
+            <div
+              class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-white px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900"
+            >
+              <div></div>
+              <input
+                class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white"
+                id="leveling"
+                name="leveling"
+                type="text"
+                placeholder=""
+                value="Member"
+              />
+            </div>
+          </div> -->
+
+      <div>
+        <label class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white" for="level">
+          Level
+        </label>
+        <div
+          class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-white px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900">
+          <select name="level" id="level"
+            class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white">
+            <option value="administrator">Administrator</option>
+            <option value="user">User</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white" for="addonlevel">
+          Leveling Addon
+        </label>
+        <div
+          class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-white px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900">
+          <select name="addonlevel" id="addonlevel"
+            class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white">
+            <option value="parent">Parent</option>
+            <option value="member">Member</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- <div>
+            <label
+              class="mb-[6px] block text-[14px] font-medium leading-[20px] dark:text-white"
+              for="type"
+            >
+              Type
+            </label>
+
+            <div
+              class="flex items-center gap-[8px] rounded-[8px] border border-neutral-400 bg-neutral-200 px-[14px] py-[8px] disabled:bg-neutral-500 dark:border-neutral-700 dark:bg-neutral-900"
+            >
+              <div></div>
+              <input
+                class="flex-grow bg-transparent leading-[24px] text-neutral-900 outline-none placeholder:text-[#99A3B6] disabled:cursor-not-allowed dark:text-white"
+                id="type"
+                name="type"
+                type="text"
+                placeholder=""
+                value="AD"
+                disabled
+              />
+            </div>
+          </div> -->
+
+      <div class="grid grid-cols-2 gap-[24px]">
+        <button
+          class="block w-full rounded-[8px] border border-neutral-400 bg-transparent py-[10px] text-center font-medium leading-[24px] text-[#4D5973] dark:border-neutral-700 dark:text-neutral-300">
+          Cancel
+        </button>
+        <button type="submit"
+          class="block w-full rounded-[8px] border border-primary-600 bg-primary-600 py-[10px] text-center font-medium leading-[24px] text-white dark:border-secondary-600 dark:bg-secondary-600 dark:text-neutral-900">
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock content %}

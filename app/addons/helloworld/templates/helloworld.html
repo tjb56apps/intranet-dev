@@ -1,0 +1,218 @@
+{% extends "base_template/base_merge_template_v3/base.html" %}
+{% block custom_style %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.css">
+<style>
+    .maincontent {
+        margin: 2rem;
+    }
+
+    .paracont {
+        margin: 1rem;
+    }
+
+    .titlecontent {
+        font-weight: bold;
+        font-size: large;
+        margin: 0.5rem 0 0.5rem 0;
+    }
+
+    .subtitlecontent {
+        font-weight: 500;
+        margin: 0.5rem 0 0.5rem 0;
+    }
+
+    .sub-content {
+        padding: 1rem;
+        background-color: #e1e1e1;
+        margin: 0.5rem;
+    }
+
+    .mb-space-content {
+        padding-bottom: 1rem;
+    }
+
+    .list-custom {
+        list-style-type: disc;
+        list-style-position: inside;
+        padding: 2rem;
+    }
+
+    .top-m {
+        margin-top: 1rem;
+    }
+
+</style>
+{% endblock custom_style %}
+{% block content %}
+<div class="mb-[24px]">
+    <ul class="flex flex-row gap-[4px]">
+        <li class="text-[24px] font-normal leading-[32px] text-neutral-600 dark:text-[#99A3B6]">
+            Application
+        </li>
+
+        <li class="mx-[7px] text-[18px] font-semibold leading-[28px] text-secondary-600 dark:text-[#99A3B6]">
+            /
+        </li>
+
+        <li class="text-[24px] font-bold leading-[32px] text-primary-600 dark:text-secondary-600">
+            Hello World
+        </li>
+    </ul>
+</div>
+<div class="rounded-[20px] border-2 border-neutral-400 bg-white dark:border-neutral-700 dark:bg-neutral-800">
+    <div class="flex items-center justify-between border-b border-neutral-400 px-[24px] dark:border-neutral-700">
+        <div class="flex flex-row items-center gap-2 py-[20px]">
+            <img :src="$store.preference.theme.isDark ? '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-user-inactive-2.png') }}' : '{{ url_for('static', filename='static/static_template_v3/img/simplicity-icon-user-neutral.png') }}'"
+                width="18" height="18" alt="Users" />
+            <h1
+                class="rounded-t-[18px] text-[20px] font-medium leading-[30px] text-neutral-700 dark:border-neutral-700 dark:bg-transparent dark:text-white">
+                Getting started
+            </h1>
+        </div>
+    </div>
+    <div class="overflow-y-auto">
+        <div class="min-h-screen maincontent">
+            <div class="paracont">
+                <h1 class="titlecontent">Struktur Folder</h1>
+                <p>Buat folder baru di dalam folder "addons" nama folder sesuaikan dengan nama modul anda.</p>
+            </div>
+            <div class="paracont">
+                <h1 class="titlecontent">File dasar</h1>
+                <p>Buat file dan folder baru di dalam folder yang sudah anda buat sebelumnya.</p>
+                <ul class="list-custom">
+                    <li>model</li>
+                    <li>static</li>
+                    <li>templates</li>
+                    <li>routes.py</li>
+                    <li>__init__.py</li>
+                    <li>__manifest__.py</li>
+                </ul>
+                <div class="mb-space-content">
+                    <h1 class="subtitlecontent"><i class="fa fa-arrow-right"></i> Model</h1>
+                    <p>Folder ini digunakan untuk menyimpan file model database</p>
+                    <p>Cara penggunaan silahkan cek file helloworld.py pada folder model di modul helloworld ini.</p>
+                </div>
+                <div class="mb-space-content">
+                    <h1 class="subtitlecontent"><i class="fa fa-arrow-right"></i> Static</h1>
+                    <p>Folder ini digunakan untuk menyimpan file statik</p>
+                    <div class="sub-content">
+                        <em style="color: red;">{{'{{url_for("static", filename="addons/helloworld/static/your_file.js")}}'}}</em>
+                    </div>
+                </div>
+                <div class="mb-space-content">
+                    <h1 class="subtitlecontent"><i class="fa fa-arrow-right"></i> Templates</h1>
+                    <p>Folder ini digunakan untuk menyimpan file template HTML</p>
+                    <div class="sub-content">
+                        <em style="color: red;">{{ '{% extends "base_template/base_merge_template_v3/base.html" %}{% block content %}your content{% endblock content %}' }}</em>
+                    </div>
+                    <p>Untuk menyesuaikan desain modul silahkan merujuk pada template base HTML.</p>
+                </div>
+
+                <div class="mb-space-content">
+                    <h1 class="subtitlecontent"><i class="fa fa-arrow-right"></i> Routes</h1>
+                    <p>File ini digunakan untuk membuat routing dan penempatan, pengintegrasian Business logic</p>
+                    <div class="sub-content">
+                        <p>from flask import render_template, redirect, url_for, session</p>
+                        <p>from app.addons.<span style="color: red;">helloworld</span> import bp</p>
+                        <p>from app.manifest import get_addon, get_child_path, get_title_module</p>
+                        <p>....</p>
+                    </div>
+                    <p>Cara penggunaan route ini silahkan periksa file routes.py pada modul helloworld yang sudah kami sediakan.</p>
+                    <img class="top-m" src="{{ url_for('static', filename='addons/helloworld/static/routes.png') }}" alt="">
+                </div>
+
+                <div class="mb-space-content">
+                    <h1 class="subtitlecontent"><i class="fa fa-arrow-right"></i> Init</h1>
+                    <p>File ini digunakan untuk membuat Blueprint</p>
+                    <div class="sub-content">
+                        <p>from flask import Blueprint</p>
+                        <p>bp = Blueprint(<span style="color: red;">"helloworld"</span>, __name__)</p>
+                        <p>from app.addons.<span style="color: red;">helloworld</span> import routes</p>
+                    </div>
+                </div>
+                <div class="mb-space-content">
+                    <h1 class="subtitlecontent"><i class="fa fa-arrow-right"></i> Manifest</h1>
+                    <p>File ini digunakan untuk membuat struktur menu berupa tipe data JSON</p>
+                    <div class="sub-content">
+                        {
+                            "id": "<em style="color: red;">AAAA</em>",
+                            "name": "<em style="color: red;">Hello World</em>",
+                            "version": "<em style="color: red;">1.0</em>",
+                            "path": "<em style="color: red;">helloworld"</em>,
+                            "nav": [
+                                {
+                                    "id": "<em style="color: red;">0</em>",
+                                    "type": "single",
+                                    "icon": "fa-home",
+                                    "name": "<em style="color: red;">Home</em>",
+                                    "path": "",
+                                    "leveling": ["parent", "member"]
+                                },
+                                {
+                                    "id": "<em style="color: red;">1</em>",
+                                    "type": "dropdown",
+                                    "icon": "fa-file-word-o",
+                                    "name": "<em style="color: red;">Settings</em>",
+                                    "leveling": ["parent", "member"],
+                                    "child": [
+                                        {
+                                            "name": "<em style="color: red;">Sub menu 1</em>",
+                                            "icon": "fa-circle-o",
+                                            "path": "<em style="color: red;">sub-menu-1</em>",
+                                            "leveling": ["parent"]
+                                        },
+                                        {
+                                            "name": "<em style="color: red;">Sub menu 2</em>",
+                                            "icon": "fa-circle-o",
+                                            "path": "<em style="color: red;">sub-menu-2</em>",
+                                            "leveling": ["parent", "member"]
+                                        }
+                                    ]
+                                },
+                            ]
+                        }
+                    </div>
+                    <p>Text warna merah artinya yang boleh anda rubah.</p>
+                    <ul class="list-custom">
+                        <li>ID, Name, Version, Path sesuaikan dengan informasi modul anda.</li>
+                        <li>Type [single] : Membuat menu tanpa dropdown</li>
+                        <li>Type [dropdown] : Membuat menu dropdown</li>
+                        <li>Leveling [parent] : untuk membuat kondisi level PARENT</li>
+                        <li>Leveling [member] : untuk membuat kondisi level MEMBER</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="paracont">
+                <h1 class="titlecontent">Get Session</h1>
+                <ul class="list-custom">
+                    {% for ses in ses_info.sessions %}
+                    <li>{{ ses }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="paracont">
+                <h1 class="titlecontent">Koneksi Database</h1>
+                <p>Membuat koneksi database baru di Extensions/database.py</p>
+                <div class="sub-content">
+                <p>engine = create_engine("sqlite:///project.db")</p>
+                <p>Session = sessionmaker(bind=engine)</p>
+                <p>db = Session()</p>
+                </div>
+                <p>Untuk penggunaan lebih lanjut periksa berkas yang sudah ada.</p>
+            </div>
+            <div class="paracont">
+                <h1 class="titlecontent">Akses Database Utama</h1>
+                <p>Anda diperbolehkan mengakses database utama hanya untuk kepentingan tertentu. dan tidak diperbolehkan untuk merubah apapun di database utama.</p>
+            </div>
+            <div class="paracont">
+                <h1 class="titlecontent">Lingkungan Kerja</h1>
+                <p>Dalam pengembangan modul harus berada dalam folder addons, pengecualian untuk folder Extensions</p>
+            </div>
+            <div class="paracont">
+                <h1 class="titlecontent">Docker Run</h1>
+                <p>docker compose up --watch</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

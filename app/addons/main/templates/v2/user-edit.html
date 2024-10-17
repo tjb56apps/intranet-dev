@@ -1,0 +1,66 @@
+{% extends "base_template/v2/baseV2.html" %}
+{% block title %}User Edit{% endblock title %}
+{% block containerfluid %}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Change permission user</h3>
+            </div>
+            <form role="form" action="{{ url_for('main.user_update') }}" method="post">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" value="{{ user.name }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" value="{{ user.email }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="department">Department</label>
+                        <input type="text" class="form-control" id="department" value="{{ user.department }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="position">Position</label>
+                        <input type="text" class="form-control" id="position" value="{{ user.position }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" name="username" id="username" value="{{ user.username }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" name="password" id="password" {% if user.type=="DB"%}required{% elif user.type=="AD" %}readonly{% endif %}>
+                    </div>
+                    <div class="form-group">
+                        <label for="appsid">Apps ID</label>
+                        <input type="text" class="form-control" name="appsid" id="appsid" value="{{ user.apps_id }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="level">Level</label>
+                        <input type="text" class="form-control" id="level" value="{{ user.level }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="addonlevel">Leveling Addon</label>
+                        <!-- <input type="text" class="form-control" id="level" name="level"> -->
+                        <select class="form-control" name="addonlevel" id="addonlevel">
+                            <option value="parent" {% if user.leveling == "parent" %}selected{% endif %}>Parent</option>
+                            <option value="member" {% if user.leveling == "member" %}selected{% endif %}>Member</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Type</label>
+                        <input type="text" class="form-control" id="type" value="{{ user.type }}" readonly>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock containerfluid %}

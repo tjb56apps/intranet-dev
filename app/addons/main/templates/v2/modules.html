@@ -1,0 +1,118 @@
+{% extends "base_template/v2/baseV2.html" %}
+{% block title %}Modules{% endblock title %}
+{% block customcss %}
+<!-- DataTables -->
+<link rel="stylesheet" href="{{ url_for('static', filename='static/v2/plugins/datatables/dataTables.bootstrap.css') }}">
+{% endblock customcss %}
+{% block containerfluid %}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Queue list of new applications</h3>
+            </div>
+            <div class="box-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 10px">No</th>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Version</th>
+                            <th style="width: 40px">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for addon in addon_tables %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ addon["id"] }}</td>
+                            <td>{{ addon["name"] }}</td>
+                            <td>{{ addon["version"] }}</td>
+                            <!-- <td><button type="button" class="btn btn-block btn-primary btn-sm">Export</button></td> -->
+                            <td>
+                                {% if addon["export_status"] %}
+                                <a href="{{ url_for('main.export_app', id=addon['id']) }}"
+                                    class="btn btn-block btn-success btn-xs">Update</a>
+                                {% else %}
+                                <a href="{{ url_for('main.export_app', id=addon['id']) }}"
+                                    class="btn btn-block btn-primary btn-xs">Export</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">List of Applications</h3>
+            </div>
+            <div class="box-body">
+                <table id="example2" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 10px">No</th>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Version</th>
+                            <th style="width: 100px">Status</th>
+                            <th style="width: 40px">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for nv in nav_query %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ nv.id }}</td>
+                            <td>{{ nv.name }}</td>
+                            <td>{{ nv.version }}</td>
+                            <td>
+                                {% if nv.status %}
+                                <a href="{{ url_for('main.update_status', id=nv.id, status=0) }}"
+                                    class="btn btn-block btn-success btn-xs">Active</a>
+                                {% else %}
+                                <a href="{{ url_for('main.update_status', id=nv.id, status=1) }}"
+                                    class="btn btn-block btn-warning btn-xs">inActive</a>
+                                {% endif %}
+                            </td>
+                            <!-- <td><button type="button" class="btn btn-block btn-primary btn-sm">Export</button></td> -->
+                            <td>
+                                <a href="void:javascript(0);" class="btn btn-block btn-danger btn-xs">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock containerfluid %}
+{% block customjs %}
+<!-- DataTables -->
+<script src="{{ url_for('static', filename='static/v2/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='static/v2/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+{% endblock customjs %}
+{% block customotherjs %}
+<script>
+    $(function () {
+        $("#example1").DataTable();
+        $("#example2").DataTable();
+        // $('#example2').DataTable({
+        //     "paging": true,
+        //     "lengthChange": false,
+        //     "searching": false,
+        //     "ordering": true,
+        //     "info": true,
+        //     "autoWidth": false
+        // });
+    });
+</script>
+{% endblock customotherjs %}
